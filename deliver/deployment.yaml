@@ -1,0 +1,125 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: train-lab
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shell-svc
+  namespace: train-lab
+  labels:
+    app: shell
+spec:
+  ports:
+  - name: http
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: shell
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shell-deploy
+  namespace: train-lab
+spec:
+  selector:
+    matchLabels:
+      app: shell
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: shell
+    spec:
+      containers:
+      - name: shell
+        image: krishnasrinivas/wetty
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+      - image: acend/alpine-sshd
+        imagePullPolicy: Always
+        name: sshd
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+      - image: docker:18.06.3-dind
+        imagePullPolicy: Always
+        name: dind
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities: {}
+          privileged: true
+          procMount: Default
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: shell-ing
+  namespace: train-lab
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - shell.labz.ch
+    secretName: tls-shell-ingress
+  rules:
+  - host: shell.labz.ch
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: shell-service
+          servicePort: 3000
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: training-rb
+  namespace: train-lab
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: train-lab
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: training-quota
+  namespace: train-lab
+spec:
+  hard:
+    limits.cpu: "4"
+    limits.memory: 8Gi
