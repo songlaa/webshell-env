@@ -4,7 +4,7 @@ ARG KUBECTL_VERSION=1.18.1
 ARG HELM_VERSION=3.1.2
 
 RUN apk --no-cache add shadow openssh coreutils grep bash bash-completion lynx \
-                       openssl curl openssh gettext vim tree tmux git docker-cli && \
+                       openssl curl openssh gettext vim tree tmux git docker-cli==18.09.8-r0 && \
     # kubectl
     curl -#L -o kubectl https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl && \
     install -t /usr/local/bin kubectl && rm kubectl && \
