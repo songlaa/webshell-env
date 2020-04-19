@@ -19,6 +19,22 @@ spec:
   selector:
     app: shell
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dind-svc
+  namespace: train
+  labels:
+    app: dind
+spec:
+  ports:
+  - name: http
+    port: 2375
+    protocol: TCP
+    targetPort: 2375
+  selector:
+    app: dind
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -68,9 +84,33 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dind-deploy
+  namespace: train
+spec:
+  selector:
+    matchLabels:
+      app: dind
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dind
+    spec:
+      containers:
       - image: docker:18.06.3-dind
         imagePullPolicy: Always
         name: dind
+        ports:
+        - containerPort: 2375
+          protocol: TCP
         resources: {}
         securityContext:
           allowPrivilegeEscalation: true
@@ -93,10 +133,7 @@ spec:
             port: 2375
           initialDelaySeconds: 5
           timeoutSeconds: 10
-      dnsPolicy: ClusterFirst
       restartPolicy: Always
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
