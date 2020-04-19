@@ -15,6 +15,7 @@ useradd -s /bin/bash -m -p '$1$9o2f6vci$taWRDMCgtsLWJRzkWYaip1' $USER
 mkdir /home/$USER/.kube && cp /root/.kube/config /home/$USER/.kube/config
 
 # create users for lab
+echo Connect to URL: https://shell.acend.ch > $FILE
 for i in {1..24}; do
     if [ ! -d "/home/user$1" ]; then
 	pass=$(openssl rand -base64 6)
