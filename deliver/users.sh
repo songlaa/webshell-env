@@ -1,11 +1,13 @@
 #!/bin/bash
 # cat logins.txt for sharing credentials
 
+USERS=12
+
 # prepare kubernetes config
 SA="/run/secrets/kubernetes.io/serviceaccount"
 kubectl config set-cluster demo-k8s --server=https://kubernetes.default --certificate-authority=$SA/ca.crt
 kubectl config set-credentials demo-k8s --token $(cat $SA/token)
-kubectl config set-context demo-k8s --cluster=localhost --user=localhost
+kubectl config set-context demo-k8s --cluster=demo-k8s --user=demo-k8s
 kubectl config use demo-k8s
 
 # create trainer for lab
@@ -16,7 +18,7 @@ mkdir /home/$USER/.kube && cp /root/.kube/config /home/$USER/.kube/config
 
 # create users for lab
 echo Connect to URL: https://shell.acend.ch > $FILE
-for i in {1..24}; do
+for i in $(seq 1 $USERS); do
     if [ ! -d "/home/user$1" ]; then
 	pass=$(openssl rand -base64 6)
 	useradd -s /bin/bash -m -p $(openssl passwd -1 $pass) user$i

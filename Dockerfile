@@ -1,6 +1,6 @@
-FROM alpine
+FROM alpine:3.10
 
-ARG KUBECTL_VERSION=1.18.1
+ARG KUBECTL_VERSION=1.18.2
 ARG HELM_VERSION=3.1.2
 
 RUN apk --no-cache add shadow openssh coreutils grep bash bash-completion lynx \
