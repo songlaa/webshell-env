@@ -33,12 +33,4 @@ done
 chmod 600 $FILE
 chown -R $USER:$USER /home/$USER/
 
-# create standard cli
-echo "alias kctx=\"echo $(grep current ~/.kube/config | awk '{print $2}')\"" >> /etc/profile
-echo "export GIT_PS1_SHOWDIRTYSTATE=1" >> /etc/profile 
-echo "export PS1='\[\033[01;32m\]\u\[\033[01;96m\]($(kctx))\[\033[01;34m\] \w\[\033[01;33m\]$(__git_ps1)\[\033[01;34m\] \$\[\033[00m\] '" >> /etc/profile
-#echo "export PS1='\[\033[01;32m\]\u\[\033[01;96m\]\[\033[01;34m\] \w\[\033[01;33m\]$(__git_ps1)\[\033[01;34m\] \$\[\033[00m\] '" >> /etc/profile
-echo "export DOCKER_HOST=localhost:2375" >> /etc/profile
-echo "source <(kubectl completion bash)" >> /etc/profile
-
 exit 0
