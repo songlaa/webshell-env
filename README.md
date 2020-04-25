@@ -9,7 +9,7 @@ Run it with the options:
 - deploy   (deploy trainer and students container)
 - destroy  (delete student namespaces only, run after finished the training)
 
-It create one fixed webshell trainer container with
+It creates one static webshell trainer container with
 - wetty webshell
 - alpine sshd
 - docker in docker
