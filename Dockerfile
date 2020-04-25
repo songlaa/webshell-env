@@ -3,7 +3,7 @@ FROM alpine:3.10
 ARG KUBECTL_VERSION=1.18.2
 ARG HELM_VERSION=3.1.2
 
-RUN apk --no-cache add shadow openssh coreutils grep bash lynx \
+RUN apk --no-cache add shadow openssh coreutils grep bash lynx sshpass \
                        openssl curl openssh gettext vim tree tmux git docker-cli==18.09.8-r0 \ 
 		       bash-completion docker-bash-completion git-bash-completion && \
     # kubectl

@@ -1,36 +1,49 @@
 #!/bin/bash
-# cat logins.txt for sharing credentials
 
-USERS=12
-
-# prepare kubernetes config
 SA="/run/secrets/kubernetes.io/serviceaccount"
-kubectl config set-cluster demo-k8s --server=https://kubernetes.default --certificate-authority=$SA/ca.crt
-kubectl config set-credentials demo-k8s --token $(cat $SA/token)
-kubectl config set-context demo-k8s --cluster=demo-k8s --user=demo-k8s
-kubectl config use demo-k8s
 
-# create trainer for lab
-USER="trainer"
-FILE="/home/trainer/logins.txt"
-useradd -s /bin/bash -m -p '$1$9o2f6vci$taWRDMCgtsLWJRzkWYaip1' $USER
-mkdir /home/$USER/.kube && cp /root/.kube/config /home/$USER/.kube/config
-
-# create users for lab
-echo Connect to URL: https://shell.acend.ch > $FILE
-for i in $(seq 1 $USERS); do
-    if [ ! -d "/home/user$1" ]; then
-	pass=$(openssl rand -base64 6)
-	useradd -s /bin/bash -m -p $(openssl passwd -1 $pass) user$i
-	echo user$i:$pass >> $FILE
+# create user for lab
+if [ -n "$STUDENT" ]; then
+    if [ ! -d "/home/$STUDENT" ]; then
+	useradd -s /bin/bash -m -p '$1$GyA7dHxv$YofsmqYCpThAVRM9Gg2kO0' $STUDENT
 	mkdir /home/user$i/.kube
-	cp /root/.kube/config /home/user$i/.kube/config
-	chown -R user$i:user$i /home/user$i/
+        kubectl config set-cluster demo-k8s --server=https://kubernetes.default --certificate-authority=$SA/ca.crt
+        kubectl config set-credentials demo-k8s --token $(cat $SA/token)
+        kubectl config set-context demo-k8s --cluster=demo-k8s --user=demo-k8s --namespace=$STUDENT
+        kubectl config use demo-k8s
+        mkdir /home/$STUDENT/.kube && cp /root/.kube/config /home/$STUDENT/.kube/config
+        chown -R $STUDENT:$STUDENT /home/$STUDENT
     fi
-done
+else
+    # create kubernetes config
+    kubectl config set-cluster demo-k8s --server=https://kubernetes.default --certificate-authority=$SA/ca.crt
+    kubectl config set-credentials demo-k8s --token $(cat $SA/token)
+    kubectl config set-context demo-k8s --cluster=demo-k8s --user=demo-k8s --namespace=train
+    kubectl config use demo-k8s
 
-# secure logins.txt
-chmod 600 $FILE
-chown -R $USER:$USER /home/$USER/
+    USER="trainer"
+    if [ ! -d "/home/$USER" ]; then
+        # create trainer for lab
+        FILE="/home/trainer/login.txt"
+        useradd -s /bin/bash -m -p '$1$9o2f6vci$taWRDMCgtsLWJRzkWYaip1' $USER
+        mkdir /home/$USER/.kube && cp /root/.kube/config /home/$USER/.kube/config
+        mkdir /home/$USER/.ssh && echo "StrictHostKeyChecking=no" > /home/$USER/.ssh/config
+        chown -R $USER:$USER /home/$USER
+    fi
+
+    USER="students"
+    # create student for lab
+    if [ ! -d "/home/$USER" ]; then
+        PASS=$(openssl rand -base64 6)
+        echo "https://shell.acend.ch/ssh/$USER?sshpass=$PASS" >> $FILE
+        useradd -s /bin/bash -m -p $(openssl passwd -1 $PASS) students
+        mkdir /home/$USER/.ssh && echo "StrictHostKeyChecking=no" > /home/$USER/.ssh/config
+        chown -R $USER:$USER /home/$USER
+    fi
+
+    # security
+    chown trainer:trainer $FILE
+    chmod 600 $FILE
+fi
 
 exit 0

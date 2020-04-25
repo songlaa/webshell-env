@@ -1,4 +1,4 @@
 export PS1='\[\033[01;32m\]\u\[\033[01;96m\]\[\033[01;34m\] \w\[\033[01;33m\]$()\[\033[01;34m\] \$\[\033[00m\] '
 export DOCKER_HOST=localhost:2375
 source <(kubectl completion bash)
-kubectl config set-context $(kubectl config current-context) --namespace $USER >/dev/null
+alias enterlab='sshpass -p "rvUITfej9YhW" ssh $STUDENT@$STUDENT-shell.$STUDENT'
