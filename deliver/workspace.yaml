@@ -5,20 +5,6 @@ metadata:
   name: $USER
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: trainer-crb
-  namespace: $USER
-roleRef:   
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: default    
-  namespace: train
----
-apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding 
 metadata:
   name: $USER-rb
@@ -48,50 +34,50 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
-  name: $USER-shell
+  name: $USER-theia-svc
   namespace: $USER
   labels:
-    app: shell
+    app: theia
 spec:
   ports:
-  - name: ssh
-    port: 22
+  - name: web
+    port: 3000
     protocol: TCP
-    targetPort: 22
+    targetPort: 3000
   selector:
-    app: shell
+    app: theia
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $USER-shell-deploy
+  name: $USER-theia-deploy
   namespace: $USER
 spec:
   selector:
     matchLabels:
-      app: shell
+      app: theia
   replicas: 1
   template:
     metadata:
       labels:
-        app: shell
+        app: theia
     spec:
       containers:
-      - image: acend/alpine-sshd
+      - image: acend/theia
         imagePullPolicy: Always
-        name: sshd
+        name: theia
         resources:
           limits:
-            cpu: 500m
+            cpu: 100m
             memory: 500Mi
           requests:
-            cpu: 100m
-            memory: 100Mi
+            cpu: 50m
+            memory: 50Mi
         env:
         - name: STUDENT
           value: "$USER"
         ports:
-        - containerPort: 22
+        - containerPort: 3000
           protocol: TCP
       - image: docker:18.09.9-dind
         imagePullPolicy: Always
@@ -125,3 +111,25 @@ spec:
       restartPolicy: Always
       securityContext: {}
       terminationGracePeriodSeconds: 30
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: theia-ing
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - training.acend.ch
+    secretName: theia-tls
+  rules:
+  - host: training.acend.ch
+    http:
+      paths:
+      - path: /$USER
+        backend:
+          serviceName: $USER-theia-svc
+          servicePort: 3000
