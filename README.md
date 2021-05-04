@@ -1,30 +1,31 @@
 # webshell-env
-Creates a webshell runtime in Kubernetes
+Creates a theia runtime for x students in Kubernetes itself
 
 ## webshell.sh
 This script can be started locally against a configured k8s cluster.
 
 Run it with the options:
-- build    (build container and push it to registry)
-- deploy   (deploy trainer and students container)
-- destroy  (delete student namespaces only, run after finished the training)
+- build      (build container and push it to registry)
+- deploy     (deploy trainer and students container)
+- destroy    (delete student deployments and services only)
+- destroyall (delete student namespaces together with the lets encrypt certs)
 
-It creates one static webshell trainer container with
-- wetty webshell
-- alpine sshd
+It creates a theia webconsole for the amount of student given in the setup.sh script.
+The entry is protected with basic-auth and https with letsencrypt.
+
+Content:
+- extended theia webconsole
 - docker in docker
 
 For number of given users in variables it creates an own workspace with the convention:
-- user1
-- user2
-- user3
+- student1
+- student2
+- student3
 - ...
 
 ## workflow
-For the first login, the trainer have to login to get the credentials for the student to use the bastion entrypoint.
-Login with the known password (may change in repo, check the password tool)
+Edit the amount of student you need and run the setup.sh script against a kubernetes cluster
 
-The "trainer" can read the file "login.txt" in his home directory. This link represents the URL where the students can use to login. They should change now the user by:
-   export STUDENT=userX && enterlab
+If everthing is deployed you will have file in your home dir which contains all the different urls with the login informations
 
-They are now in their own environment and have access to the docker in docker daemon and kubectl which is preconfigured to the same cluster and namespace called by the user name itself.
+The student can use docker und kubectl directly in against their namespace where theia is deployed (e.g. student1)
