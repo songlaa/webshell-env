@@ -15,9 +15,8 @@ build() {
         docker push $ORG/$APP
         docker image prune --force
     elif [ -n "$(which buildah)" ]; then
-        sudo buildah build -t $ORG/$APP .
+        sudo buildah bud -t $ORG/$APP .
         sudo buildah push $ORG/$APP
-        sudo buildah image prune --force
     fi
 }
 
