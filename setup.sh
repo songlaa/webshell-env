@@ -7,7 +7,8 @@ fi
 
 export ORG="acend"
 export APP="theia"
-export STUDENTS=2
+export STUDENTS=8
+export AUTHFILE="~/acend-training-authfile"
 
 build() {
     if [ -n "$(which docker)" ]; then
@@ -23,15 +24,34 @@ build() {
 deploy() {
     for i in $(seq 1 $STUDENTS); do
         export STUDENT=student$i
-        cat deliver/workspace.yaml | envsubst | kubectl apply -f -
+        cat workspace.yaml | envsubst | kubectl apply -f -
+
+	if [[ ! "$(kubectl -n $STUDENT get secrets -o name)" =~ "basic-auth" ]]; then
+	    PW=$(date | md5sum | awk '{print $1}')
+            echo $PW | htpasswd -i -c auth student$i
+	    kubectl -n $STUDENT create secret generic basic-auth --from-file=auth
+	    echo "https://student$i:$PW@student$i.theia.acend.ch" >> $AUTHFILE
+	    rm auth
+	    sleep 5
+	fi
     done
 }
 
 destroy() {
-    for i in $(seq 1 $USERS); do
+    # keeps ingresses and certs as there are expensive
+    for i in $(seq 1 $STUDENTS); do
+        export STUDENT=student$i
+        kubectl -n $STUDENT delete deploy $STUDENT-theia-deploy
+        kubectl -n $STUDENT delete svc    $STUDENT-theia-svc
+    done
+}
+
+destroyall() {
+    for i in $(seq 1 $STUDENTS); do
         export STUDENT=student$i
         kubectl delete ns $STUDENT
     done
+    rm $AUTHFILE
 }
 
 "$@"

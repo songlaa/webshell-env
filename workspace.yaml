@@ -1,73 +1,84 @@
+---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: train
+  name: $STUDENT
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding 
+metadata:
+  name: $STUDENT-rb
+  namespace: $STUDENT
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: $STUDENT
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: $STUDENT-crb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: $STUDENT
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: shell-svc
-  namespace: train
+  name: $STUDENT-theia-svc
+  namespace: $STUDENT
   labels:
-    app: shell
+    app: theia
 spec:
   ports:
-  - name: http
+  - name: web
     port: 3000
     protocol: TCP
     targetPort: 3000
   selector:
-    app: shell
+    app: theia
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shell-deploy
-  namespace: train
+  name: $STUDENT-theia-deploy
+  namespace: $STUDENT
 spec:
   selector:
     matchLabels:
-      app: shell
+      app: theia
   replicas: 1
   template:
     metadata:
       labels:
-        app: shell
+        app: theia
     spec:
       containers:
-      - name: shell
-        image: krishnasrinivas/wetty
+      - image: acend/theia
         imagePullPolicy: Always
+        name: theia
         resources:
           limits:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 500m
+            memory: 500Mi
           requests:
-            cpu: 100m
-            memory: 100Mi
+            cpu: 50m
+            memory: 50Mi
+        env:
+        - name: STUDENT
+          value: "$STUDENT"
         ports:
         - containerPort: 3000
           protocol: TCP
-        readinessProbe:
-          tcpSocket:
-            port: 3000
-          initialDelaySeconds: 2
-          timeoutSeconds: 10
-        livenessProbe:
-          tcpSocket:
-            port: 3000
-          initialDelaySeconds: 5
-          timeoutSeconds: 10
-      - image: acend/alpine-sshd
-        imagePullPolicy: Always
-        name: sshd
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 1000Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
       - image: docker:18.09.9-dind
         imagePullPolicy: Always
         name: dind
@@ -101,51 +112,27 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: shell-ing
-  namespace: train
+  name: theia-ing
+  namespace: $STUDENT
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-secret: basic-auth
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
   - hosts:
-    - shell.acend.ch
-    secretName: tls-shell-ingress
+    - $STUDENT.theia.acend.ch
+    secretName: theia-tls
   rules:
-  - host: shell.acend.ch
+  - host: $STUDENT.theia.acend.ch
     http:
       paths:
       - path: /
         backend:
-          serviceName: shell-svc
+          serviceName: $STUDENT-theia-svc
           servicePort: 3000
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: trainer-crb
-  namespace: train
-roleRef:   
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: default    
-  namespace: train
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: training-crb
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: view
-subjects:
-- kind: ServiceAccount
-  name: default
-  namespace: train
