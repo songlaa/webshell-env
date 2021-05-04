@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if ! [[ "$1" =~ ^(build|deploy|destroy)$ ]]; then
-    printf "=> No valid target given, possible values: build|deploy|destroy\n\n"
+if ! [[ "$1" =~ ^(build|deploy|destroy|destroyall)$ ]]; then
+    printf "=> No valid target given, possible values: build|deploy|destroy|destroyall\n\n"
     exit 1
 fi
 

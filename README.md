@@ -1,7 +1,7 @@
-# webshell-env
+# theia-env
 Creates a theia runtime for x students in Kubernetes itself
 
-## webshell.sh
+## setup.sh
 This script can be started locally against a configured k8s cluster.
 
 Run it with the options:
