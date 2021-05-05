@@ -8,7 +8,7 @@ fi
 export ORG="acend"
 export APP="theia"
 export STUDENTS=8
-export AUTHFILE="~/acend-training-authfile"
+export AUTHFILE="/home/$USER/acend-training-authfile"
 
 build() {
     if [ -n "$(which docker)" ]; then
@@ -22,6 +22,7 @@ build() {
 }
 
 deploy() {
+    touch $AUTHFILE
     for i in $(seq 1 $STUDENTS); do
         export STUDENT=student$i
         cat workspace.yaml | envsubst | kubectl apply -f -

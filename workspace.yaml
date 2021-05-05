@@ -62,6 +62,13 @@ spec:
       labels:
         app: theia
     spec:
+      initContainers:
+      - name: welcome-msg
+        image: busybox
+        command: ['sh', '-c', "echo Welcome to the acend theia ide > /home/project/welcome"]
+        volumeMounts:
+        - name: shared-data
+          mountPath: /home/project
       containers:
       - image: acend/theia
         imagePullPolicy: Always
@@ -79,6 +86,9 @@ spec:
         ports:
         - containerPort: 3000
           protocol: TCP
+        volumeMounts:
+        - name: shared-data
+          mountPath: /home/project
       - image: docker:18.09.9-dind
         imagePullPolicy: Always
         name: dind
@@ -107,10 +117,16 @@ spec:
             port: 2375
           initialDelaySeconds: 5
           timeoutSeconds: 10
+        volumeMounts:
+        - name: shared-data
+          mountPath: /home/project
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      volumes:
+      - name: shared-data
+        emptyDir: {}
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
