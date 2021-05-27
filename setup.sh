@@ -11,6 +11,7 @@ export STUDENTS=8
 export AUTHFILE="/home/$USER/acend-training-authfile"
 
 build() {
+    set -e
     if [ -n "$(which docker)" ]; then
         docker build -t $ORG/$APP .
         docker push $ORG/$APP
