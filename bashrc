@@ -4,3 +4,4 @@ export DOCKER_HOST=localhost:2375
 source <(kubectl completion bash)
 /usr/bin/az.completion.sh
 alias ll="ls -l"
+figlet -w 120 welcome @ acend
