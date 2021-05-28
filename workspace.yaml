@@ -128,6 +128,15 @@ spec:
       - name: shared-data
         emptyDir: {}
 ---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  namespace: $STUDENT
+  name: theia-rq
+spec:
+  hard:
+    pods: "9"
+---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
