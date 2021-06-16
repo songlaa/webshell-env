@@ -14,7 +14,7 @@ build() {
     set -e
     if [ -n "$(which docker)" ]; then
         docker build -t $ORG/$APP .
-        docker push $ORG/$APP
+        # docker push $ORG/$APP
         docker image prune --force
     elif [ -n "$(which buildah)" ]; then
         sudo buildah bud -t docker.io/$ORG/$APP .
