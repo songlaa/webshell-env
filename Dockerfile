@@ -1,15 +1,15 @@
 FROM theiaide/theia
 
-ARG KUBECTL_VERSION=1.21.1
-ARG HELM_VERSION=3.6.1
+ARG KUBECTL_VERSION=1.22.0
+ARG HELM_VERSION=3.6.2
 ARG DOCKER_COMPOSE=1.29.2
-ARG TERRAFORM_VERSION=1.0.0
-ARG AZURECLI_VERSION=2.25.0
+ARG TERRAFORM_VERSION=1.0.4
+ARG AZURECLI_VERSION=2.27.0
 
 user root
 RUN sed -i "s/3.11/3.14/" /etc/apk/repositories && \
     apk --no-cache update && \
-    apk --no-cache add coreutils grep bash curl gettext vim tree git \
+    apk --no-cache add coreutils grep bash curl gettext vim tree git cryptsetup \
                        docker-cli mysql-client lynx py3-pip figlet \
                        bash-completion docker-bash-completion git-bash-completion \
 		       py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel && \
