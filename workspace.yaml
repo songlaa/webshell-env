@@ -2,27 +2,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: $USER
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: trainer-crb
-  namespace: $USER
-roleRef:   
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: default    
-  namespace: train
+  name: $STUDENT
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding 
 metadata:
-  name: $USER-rb
-  namespace: $USER
+  name: $STUDENT-rb
+  namespace: $STUDENT
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -30,12 +16,12 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: $USER
+  namespace: $STUDENT
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: $USER-crb
+  name: $STUDENT-crb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -43,56 +29,66 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: $USER
+  namespace: $STUDENT
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $USER-shell
-  namespace: $USER
+  name: $STUDENT-theia-svc
+  namespace: $STUDENT
   labels:
-    app: shell
+    app: theia
 spec:
   ports:
-  - name: ssh
-    port: 22
+  - name: web
+    port: 3000
     protocol: TCP
-    targetPort: 22
+    targetPort: 3000
   selector:
-    app: shell
+    app: theia
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $USER-shell-deploy
-  namespace: $USER
+  name: $STUDENT-theia-deploy
+  namespace: $STUDENT
 spec:
   selector:
     matchLabels:
-      app: shell
+      app: theia
   replicas: 1
   template:
     metadata:
       labels:
-        app: shell
+        app: theia
     spec:
+      initContainers:
+      - name: welcome-msg
+        image: busybox
+        command: ['sh', '-c', "echo Welcome to the acend theia ide > /home/project/welcome"]
+        volumeMounts:
+        - name: shared-data
+          mountPath: /home/project
       containers:
-      - image: acend/alpine-sshd
+      - image: acend/theia
         imagePullPolicy: Always
-        name: sshd
+        name: theia
         resources:
           limits:
             cpu: 500m
             memory: 500Mi
           requests:
-            cpu: 100m
-            memory: 100Mi
+            cpu: 50m
+            memory: 50Mi
         env:
         - name: STUDENT
-          value: "$USER"
+          value: "$STUDENT"
         ports:
-        - containerPort: 22
+        - containerPort: 3000
           protocol: TCP
+        volumeMounts:
+        - name: shared-data
+          mountPath: /home/project
       - image: docker:18.09.9-dind
         imagePullPolicy: Always
         name: dind
@@ -121,7 +117,47 @@ spec:
             port: 2375
           initialDelaySeconds: 5
           timeoutSeconds: 10
+        volumeMounts:
+        - name: shared-data
+          mountPath: /home/project
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      volumes:
+      - name: shared-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  namespace: $STUDENT
+  name: theia-rq
+spec:
+  hard:
+    pods: "9"
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: theia-ing
+  namespace: $STUDENT
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-secret: basic-auth
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - $STUDENT.theia.acend.ch
+    secretName: theia-tls
+  rules:
+  - host: $STUDENT.theia.acend.ch
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: $STUDENT-theia-svc
+          servicePort: 3000
