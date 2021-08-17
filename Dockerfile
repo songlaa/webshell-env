@@ -9,7 +9,7 @@ ARG AZURECLI_VERSION=2.27.0
 user root
 RUN sed -i "s/3.11/3.14/" /etc/apk/repositories && \
     apk --no-cache update && \
-    apk --no-cache add coreutils grep bash curl gettext vim tree git cryptsetup \
+    apk --no-cache add coreutils grep bash curl gettext vim tree git p7zip \
                        docker-cli mysql-client lynx py3-pip figlet \
                        bash-completion docker-bash-completion git-bash-completion \
 		       py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel && \
