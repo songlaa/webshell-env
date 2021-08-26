@@ -137,27 +137,30 @@ spec:
   hard:
     pods: "9"
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: theia-ing
   namespace: $STUDENT
   annotations:
-    kubernetes.io/ingress.class: traefik
+    kubernetes.io/ingress.class: $INGRESS
     ingress.kubernetes.io/ssl-redirect: "true"
-    ingress.kubernetes.io/auth-type: basic
-    ingress.kubernetes.io/auth-secret: basic-auth
+    $INGRESS.ingress.kubernetes.io/auth-type: basic
+    $INGRESS.ingress.kubernetes.io/auth-secret: basic-auth
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
   - hosts:
-    - $STUDENT.theia.acend.ch
+    - $STUDENT.$DOMAIN
     secretName: theia-tls
   rules:
-  - host: $STUDENT.theia.acend.ch
+  - host: $STUDENT.$DOMAIN
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: $STUDENT-theia-svc
-          servicePort: 3000
+          service:
+            name: $STUDENT-theia-svc
+            port:
+              number: 3000
