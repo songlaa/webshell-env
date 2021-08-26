@@ -36,7 +36,6 @@ deploy() {
         * ) echo "=> answer yes to go on the next time"; exit;;
     esac 
 
-    echo "$(date): latest credentials links" >> $AUTHFILE
     for i in $(seq 1 $STUDENTS); do
         export STUDENT=$PREFIX$i
         cat workspace.yaml | envsubst | kubectl apply -f -
@@ -45,7 +44,7 @@ deploy() {
 	    PW=$(date | md5sum | awk '{print $1}')
             echo $PW | htpasswd -i -c auth $PREFIX$i
 	    kubectl -n $STUDENT create secret generic basic-auth --from-file=auth
-	    echo "https://$PREFIX$i:$PW@$PREFIX$i.$DOMAIN" >> $AUTHFILE
+	    echo "$(date): https://$PREFIX$i:$PW@$PREFIX$i.$DOMAIN" >> $AUTHFILE
 	    rm auth
 	    sleep 5
 	fi
