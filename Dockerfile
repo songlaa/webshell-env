@@ -8,13 +8,13 @@ ARG AZURECLI_VERSION=2.27.2
 
 user root
 RUN sed -i "s/3.11/3.14/" /etc/apk/repositories && \
-    apk --no-cache update && \
+    apk --no-cache update && apk --no-cache -U upgrade -a && \
     apk --no-cache add coreutils grep bash curl gettext vim tree git p7zip \
-                       docker-cli mysql-client lynx py3-pip figlet \
-                       bash-completion docker-bash-completion git-bash-completion \
-		       py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel && \
-    # Azure CLI
-    pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
+                       docker-cli mysql-client lynx py3-pip figlet grep \
+                       bash-completion docker-bash-completion jq bind-tools \
+		       py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel
+
+RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/network/v201*" && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/network/v2020*" && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/cosmosdb" && \
@@ -33,7 +33,10 @@ RUN sed -i "s/3.11/3.14/" /etc/apk/repositories && \
     # Terraform
     curl -#L -o tf.zip https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip tf.zip && rm tf.zip && \
-    install -t /usr/local/bin terraform && rm terraform
+    install -t /usr/local/bin terraform && rm terraform && \
+    # tfenv
+    curl -#L -o tfenv https://raw.githubusercontent.com/tfutils/tfenv/master/bin/tfenv && \
+    install -t /usr/local/bin tfenv && rm tfenv
 
 COPY bashrc /home/theia/.bashrc
 

@@ -54,7 +54,7 @@ deploy() {
 }
 
 destroy() {
-    # keeps ingresses and certs as there are expensive
+    # keeps ingresses and certs as they are expensive
     for i in $(seq 1 $STUDENTS); do
         export STUDENT=$PREFIX$i
         kubectl -n $STUDENT delete deploy $STUDENT-theia-deploy
