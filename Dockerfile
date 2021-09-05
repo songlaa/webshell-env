@@ -6,6 +6,7 @@ ARG DOCKER_COMPOSE=1.29.2
 # ARG TERRAFORM_VERSION=1.0.5
 ARG AZURECLI_VERSION=2.27.2
 ARG TFENV_VERSION=v2.2.2
+ARG ARGOCD_VERSION=2.1.2
 
 USER root
 
@@ -33,11 +34,14 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     install -t /usr/local/bin helm && rm helm && \
     # docker-compose
     curl -L# -o docker-compose https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE/docker-compose-Linux-x86_64 && \
-    install -t /usr/local/bin docker-compose && rm docker-compose
+    install -t /usr/local/bin docker-compose && rm docker-compose && \
     # Terraform
     # curl -#L -o tf.zip https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     # unzip tf.zip && rm tf.zip && \
     # install -t /usr/local/bin terraform && rm terraform && \
+    # Argo CD
+    curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64 && \
+    chmod +x /usr/local/bin/argocd
 
 RUN git config --global advice.detachedHead false && \
     cd /opt/ && git clone --depth 1 --branch ${TFENV_VERSION} https://github.com/tfutils/tfenv.git && \
