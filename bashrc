@@ -3,6 +3,7 @@ export PS1='\[\033[01;32m\]\u\[\033[01;96m\]\[\033[01;34m\] \w\[\033[01;33m\]$()
 export DOCKER_HOST=localhost:2375
 alias ls="ls --color"
 alias ll="ls -l"
+find /home/project -name .profile -exec source {} \; 2>/dev/null
 
 source <(kubectl completion bash)
 /usr/bin/az.completion.sh
