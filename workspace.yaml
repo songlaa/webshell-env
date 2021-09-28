@@ -149,6 +149,7 @@ metadata:
     ingress.kubernetes.io/ssl-redirect: "true"
     $INGRESS.ingress.kubernetes.io/auth-type: basic
     $INGRESS.ingress.kubernetes.io/auth-secret: basic-auth
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
   - hosts:
