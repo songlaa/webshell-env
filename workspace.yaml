@@ -72,7 +72,7 @@ spec:
         - name: shared-data
           mountPath: /home/project
       containers:
-      - image: acend/theia
+      - image: quay.io/acend/theia:latest
         imagePullPolicy: Always
         name: theia
         resources:
