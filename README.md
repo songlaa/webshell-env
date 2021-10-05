@@ -50,7 +50,7 @@ ingress: # Make sure this fits your enviornemt!
        - mystudent.<domain>
 ```
 
-`<secretname>`: you have to make sure that this secrets exists in your Namespace. This Helm Chart does not create a Secret for you
+`<secretname>`: you have to make sure that this secrets exists in your Namespace. This Helm Chart does not create a TLS Secret/Certificate for you.
 
 ```bash
 helm upgrade --install --namespace mystudent webhell ./deploy/charts/webshell -f values.yaml
