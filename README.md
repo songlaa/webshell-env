@@ -23,6 +23,38 @@ For number of given users in variables it creates an own workspace with the conv
 - student3
 - ...
 
+## Deploy using Helm Chart
+
+Create a `values.yaml` e.g.:
+
+```yaml
+student: "mystudent" # This should be the namespace where the student's webshell is deployed to
+password: "supersecretbassword" # For the basic-auth Autentication
+
+ingress: # Make sure this fits your enviornemt!
+  enabled: true
+  className: "nginx"
+  annotations: 
+    ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+  hosts:
+    - host: mystudent.<domain>
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: 
+   - secretName: <secretname>
+     hosts:
+       - mystudent.<domain>
+```
+
+`<secretname>`: you have to make sure that this secrets exists in your Namespace. This Helm Chart does not create a Secret for you
+
+```bash
+helm upgrade --install --namespace mystudent webhell ./deploy/charts/webshell -f values.yaml
+```
+
 ## workflow
 Edit the amount of student you need and run the setup.sh script against a kubernetes cluster
 
