@@ -24,17 +24,10 @@ theia:
       cpu: 50m
       memory: 50Mi
   securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
 
 init:
   image:
-    repository: docker.io/_library/busybox
+    repository: busybox
     tag: latest
 
 dind:
