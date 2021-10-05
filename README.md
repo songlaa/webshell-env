@@ -25,6 +25,7 @@ For number of given users in variables it creates an own workspace with the conv
 
 ## Deploy using Helm Chart
 
+This will deploy one webshell. If multiple webshells are needed, create as many instances in seperated Namespaces as you want.
 Create a `values.yaml` e.g.:
 
 ```yaml

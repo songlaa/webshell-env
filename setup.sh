@@ -25,6 +25,7 @@ build() {
 }
 
 deploy() {
+    # TODO: refactor using helm?
     read -p "Enter Ingress (default: nginx): " INGRESS
     if [ -z "$INGRESS" ]; then
         export INGRESS="nginx"
