@@ -1,0 +1,99 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "webshell.fullname" . }}
+  labels:
+    {{- include "webshell.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "webshell.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "webshell.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "webshell.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: welcome-msg
+        image: "{{ .Values.init.image.repository }}:{{ .Values.init.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ['sh', '-c', "echo Welcome to the acend theia ide > /home/project/welcome"]
+        volumeMounts:
+        - name: shared-data
+          mountPath: /home/project
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.theia.securityContext | nindent 12 }}
+          image: "{{ .Values.theia.image.repository }}:{{ .Values.theia.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: STUDENT
+            value: "{ .Values.student }}"
+          ports:
+            - name: web
+              containerPort: 3000
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.theia.resources | nindent 12 }}
+          volumeMounts:
+          - name: shared-data
+            mountPath: /home/project
+        - image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: dind
+          ports:
+          - containerPort: 2375
+            protocol: TCP
+          resources:
+            {{- toYaml .Values.dind.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: true
+            capabilities: {}
+            privileged: true
+            procMount: Default
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          tty: true
+          readinessProbe:
+            tcpSocket:
+              port: 2375
+            initialDelaySeconds: 2
+            timeoutSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 2375
+            initialDelaySeconds: 5
+            timeoutSeconds: 10
+          volumeMounts:
+          - name: shared-data
+            mountPath: /home/project
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: shared-data
+          emptyDir: {}
