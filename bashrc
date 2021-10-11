@@ -6,6 +6,9 @@ alias ll="ls -l"
 find /home/project -name .profile -exec source {} \; 2>/dev/null
 
 source <(kubectl completion bash)
+source <(helm completion bash)
+source <(argocd completion bash)
+
 /usr/bin/az.completion.sh
 complete -C /usr/local/bin/terraform terraform
 
