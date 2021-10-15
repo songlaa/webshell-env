@@ -95,5 +95,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: shared-data
-          emptyDir: {}
+      - name: shared-data
+      {{- if .Values.theia.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ include "webshell.fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}

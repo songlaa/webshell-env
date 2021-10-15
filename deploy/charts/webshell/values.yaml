@@ -19,11 +19,15 @@ theia:
   resources: 
     limits:
       cpu: 500m
-      memory: 500Mi
+      memory: 1Gi
     requests:
       cpu: 50m
       memory: 50Mi
   securityContext: {}
+  persistence:
+    enabled: false
+    pvcsize: 1Gi
+    storageclass: cloudscale-volume-bulk
 
 init:
   image:
@@ -73,9 +77,6 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
-
-
 
 nodeSelector: {}
 

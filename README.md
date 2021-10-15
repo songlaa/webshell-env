@@ -63,11 +63,12 @@ This is needed e.g. if you wan't to deploy the chart using the Terraform helm_re
 ```bash
 cd deploy/charts
 helm package ./webshell
-`` 
+```
 
 Then commit the created `tgz` package.
 
 ## workflow
+
 Edit the amount of student you need and run the setup.sh script against a kubernetes cluster
 
 If everthing is deployed you will have file in your home dir which contains all the different urls with the login informations

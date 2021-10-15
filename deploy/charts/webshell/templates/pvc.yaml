@@ -1,0 +1,15 @@
+{{- if .Values.theia.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "webshell.fullname" . }}
+  labels:
+    {{- include "webshell.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ .Values.theia.persistence.pvcsize }}"
+  storageClassName: {{ .Values.theia.persistence.storageclass }}
+{{- end }}
