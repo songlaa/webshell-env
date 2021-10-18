@@ -5,6 +5,7 @@ ARG AZURECLI_VERSION=2.28.0
 ARG DOCKER_COMPOSE=1.29.2
 ARG HELM_VERSION=3.7.0
 ARG KUBECTL_VERSION=1.22.2
+ARG OC_VERSION=4.8
 ARG TERRAFORM_VERSION=1.0.7
 ARG TFENV_VERSION=v2.2.2
 
@@ -38,7 +39,10 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     install -t /usr/local/bin docker-compose && rm docker-compose && \
     # Argo CD
     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64 && \
-    chmod +x /usr/local/bin/argocd
+    chmod +x /usr/local/bin/argocd && \
+    # oc
+    curl -#L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-${OC_VERSION}/openshift-client-linux.tar.gz | tar -xvz oc && \
+    install -t /usr/local/bin oc && rm oc
 
 RUN git config --global advice.detachedHead false && \
     # tfenv & terraform
