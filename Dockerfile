@@ -13,7 +13,7 @@ USER root
 RUN sed -i "s/3.11/3.14/" /etc/apk/repositories && \
     apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
-    apk --no-cache add coreutils grep bash curl gettext vim tree git p7zip \
+    apk --no-cache add coreutils grep bash curl gettext vim tree git p7zip gcompat \
                        docker-cli mysql-client lynx bind-tools figlet jq \
                        bash-completion docker-bash-completion git-bash-completion \
 		       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel
