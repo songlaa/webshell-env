@@ -5,9 +5,9 @@ alias ls="ls --color"
 alias ll="ls -l"
 find /home/project -name .profile -exec source {} \; 2>/dev/null
 
-source <(kubectl completion bash)
-source <(helm completion bash)
-source <(argocd completion bash)
+for cmd in argocd helm kubectl oc; do
+  source <(${cmd} completion bash)
+done
 
 /usr/bin/az.completion.sh
 complete -C /usr/local/bin/terraform terraform
