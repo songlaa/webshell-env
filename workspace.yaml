@@ -91,13 +91,16 @@ spec:
         volumeMounts:
         - name: shared-data
           mountPath: /home/project
-      - image: docker:18.09.9-dind
+      - image: docker:20.10.9-dind
         imagePullPolicy: Always
         name: dind
         ports:
-        - containerPort: 2375
+        - containerPort: 2376
           protocol: TCP
         resources: {}
+        env:
+        - name: DOCKER_TLS_CERTDIR
+          value: "/home/project/.tls"
         securityContext:
           allowPrivilegeEscalation: true
           capabilities: {}
@@ -111,12 +114,12 @@ spec:
         tty: true
         readinessProbe:
           tcpSocket:
-            port: 2375
+            port: 2376
           initialDelaySeconds: 2
           timeoutSeconds: 10
         livenessProbe:
           tcpSocket:
-            port: 2375
+            port: 2376
           initialDelaySeconds: 5
           timeoutSeconds: 10
         volumeMounts:

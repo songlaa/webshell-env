@@ -8,6 +8,7 @@ ARG KUBECTL_VERSION=1.22.2
 ARG OC_VERSION=4.8
 ARG TERRAFORM_VERSION=1.0.7
 ARG TFENV_VERSION=v2.2.2
+ARG KUSTOMIZE_VERSION=4.4.0
 
 USER root
 RUN sed -i "s/3.11/3.14/" /etc/apk/repositories && \
@@ -42,7 +43,10 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     chmod +x /usr/local/bin/argocd && \
     # oc
     curl -#L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-${OC_VERSION}/openshift-client-linux.tar.gz | tar -xvz oc && \
-    install -t /usr/local/bin oc && rm oc
+    install -t /usr/local/bin oc && rm oc && \
+    # Kustomize
+    curl -#L "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" | tar -xvz && \
+    install -t /usr/local/bin kustomize && rm kustomize
 
 RUN git config --global advice.detachedHead false && \
     # tfenv & terraform
