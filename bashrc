@@ -1,9 +1,12 @@
 source /etc/profile
 export PS1='\[\033[01;32m\]\u\[\033[01;96m\]\[\033[01;34m\] \w\[\033[01;33m\]$()\[\033[01;34m\] \$\[\033[00m\] '
-export DOCKER_HOST=localhost:2375
 alias ls="ls --color"
 alias ll="ls -l"
 find /home/project -name .profile -exec source {} \; 2>/dev/null
+
+export DOCKER_HOST=tcp://localhost:2376
+export DOCKER_TLS_VERIFY=1
+export DOCKER_CERT_PATH=/home/project/.tls/client
 
 for cmd in argocd helm kubectl oc; do
   source <(${cmd} completion bash)
