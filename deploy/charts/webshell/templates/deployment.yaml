@@ -55,8 +55,11 @@ spec:
         - image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: dind
+          env:
+          - name: DOCKER_TLS_CERTDIR
+            value: /home/project/.tls
           ports:
-          - containerPort: 2375
+          - containerPort: 2376
             protocol: TCP
           resources:
             {{- toYaml .Values.dind.resources | nindent 12 }}
@@ -71,12 +74,12 @@ spec:
           tty: true
           readinessProbe:
             tcpSocket:
-              port: 2375
+              port: 2376
             initialDelaySeconds: 2
             timeoutSeconds: 10
           livenessProbe:
             tcpSocket:
-              port: 2375
+              port: 2376
             initialDelaySeconds: 5
             timeoutSeconds: 10
           volumeMounts:
