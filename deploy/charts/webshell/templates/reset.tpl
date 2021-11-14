@@ -41,7 +41,7 @@ metadata:
   name: reset-cronjob
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: reset-cronjob
 subjects:
 - kind: ServiceAccount
@@ -50,7 +50,7 @@ subjects:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
   name: reset-cronjob
 rules:
