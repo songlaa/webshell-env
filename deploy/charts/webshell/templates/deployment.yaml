@@ -42,7 +42,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           - name: STUDENT
-            value: "{ .Values.student }}"
+            value: "{{ .Values.student }}"
           ports:
             - name: web
               containerPort: 3000

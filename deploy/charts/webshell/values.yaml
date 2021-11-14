@@ -58,6 +58,13 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
+rbac:
+  create: true
+
+reset:
+  enabled: false
+  schedule: 0 */1 * * *
+
 service:
   type: ClusterIP
   port: 3000

@@ -66,3 +66,35 @@ jobs:
         with:
           name: trivy-results-main
           path: trivy-results.txt
+
+      - 
+        name: 'Install Helm'
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.6.2
+      - 
+        name: Install Kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: v1.21.2
+      - 
+        name: Create KUBECONFIG
+        env:
+          KUBE_CONFIG: '${{ secrets.KUBECONFIG }}'
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBE_CONFIG" > $HOME/.kube/config
+      - 
+        name: Deploy Helm Release
+        env:
+          HELM_RELEASE: 'demo-webshell'
+          NAMESPACE: 'acend-webshell'
+          PASSWORD: '${{ secrets.WEBSHELL_TEST_PASSWORD }}'
+        run: |
+          helm upgrade $HELM_RELEASE webshell --install --wait --kubeconfig $HOME/.kube/config  --namespace=$NAMESPACE  --repo=https://acend.github.io/webshell-env/  --set password=$PASSWORD --values=helm-chart/values.yaml --atomic
+      - 
+        name: Redeploy Webshell
+        env:
+          NAMESPACE: 'acend-webshell'
+        run: |
+          kubectl rollout restart deployment/webshell --kubeconfig $HOME/.kube/config --namespace $NAMESPACE

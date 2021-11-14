@@ -1,4 +1,4 @@
-FROM acend/theia-original
+FROM quay.io/acend/theia-original
 
 ARG ARGOCD_VERSION=2.1.2
 ARG AZURECLI_VERSION=2.28.0
