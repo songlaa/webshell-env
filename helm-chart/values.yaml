@@ -5,7 +5,7 @@
 replicaCount: 1
 
 
-student: "demo"
+student: "test"
 
 
 rbac:
