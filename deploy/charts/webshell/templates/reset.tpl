@@ -21,7 +21,7 @@ spec:
             - rollout
             - restart
             - deployment
-            - webshell
+            - {{ include "webshell.fullname" . }}
             image: quay.io/bitnami/kubectl
             name: reset-webshell
           serviceAccount: reset-cronjob
