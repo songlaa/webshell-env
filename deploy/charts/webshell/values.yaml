@@ -37,7 +37,7 @@ init:
 dind:
   image:
     repository: docker
-    tag: 20.10.9-dind
+    tag: 20.10.10-dind
   resources: {}
 
 imagePullSecrets: []
