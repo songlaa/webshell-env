@@ -61,11 +61,14 @@ helm upgrade --install --namespace mystudent webhell ./deploy/charts/webshell -f
 This is needed e.g. if you wan't to deploy the chart using the Terraform helm_release resource without a Chart repository service (directly from Github)
 
 ```bash
-cd deploy/charts
-helm package ./webshell
+helm package ./deploy/charts/* && mv *.tgz docs/
 ```
 
-Then commit the created `tgz` package.
+Finally let's create the helm repo index
+
+helm repo index docs --url https://acend.github.io/webshell-env/ 
+
+Then commit the changes.
 
 ## workflow
 
