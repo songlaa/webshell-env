@@ -7,6 +7,9 @@ replicaCount: 1
 
 student: "test"
 
+dind:
+  enabled: false
+
 
 rbac:
   create: false

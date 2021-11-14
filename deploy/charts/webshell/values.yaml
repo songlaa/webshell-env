@@ -35,6 +35,7 @@ init:
     tag: latest
 
 dind:
+  enabled: true
   image:
     repository: docker
     tag: 20.10.10-dind
