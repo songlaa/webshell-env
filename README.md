@@ -53,22 +53,13 @@ ingress: # Make sure this fits your enviornemt!
 `<secretname>`: you have to make sure that this secrets exists in your Namespace. This Helm Chart does not create a TLS Secret/Certificate for you.
 
 ```bash
-helm upgrade --install --namespace mystudent webhell ./deploy/charts/webshell -f values.yaml
+helm repo add acend-webshell https://acend.github.io/webshell-env/
+helm upgrade --install --namespace mystudent webhell acend-webshell/webshell -f values.yaml
 ```
 
-## Package a new Chart Version
+## Release a new Chart Version
 
-This is needed e.g. if you wan't to deploy the chart using the Terraform helm_release resource without a Chart repository service (directly from Github)
-
-```bash
-helm package ./deploy/charts/* && mv *.tgz docs/
-```
-
-Finally let's create the helm repo index
-
-helm repo index docs --url https://acend.github.io/webshell-env/ 
-
-Then commit the changes.
+When changing `version` in `deploy/charts/webshell/Chart.yaml` a new chart version is automaticly released and available in the chart repositoy `https://acend.github.io/webshell-env/`
 
 ## workflow
 
