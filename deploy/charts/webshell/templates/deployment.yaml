@@ -52,7 +52,7 @@ spec:
           volumeMounts:
           - name: shared-data
             mountPath: /home/project
-        {{- if .Values.dind.enabled -}}
+        {{- if .Values.dind.enabled }}
         - image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: dind
@@ -86,7 +86,7 @@ spec:
           volumeMounts:
           - name: shared-data
             mountPath: /home/project
-          {{- end -}}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
