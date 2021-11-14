@@ -96,5 +96,6 @@ jobs:
         name: Redeploy Webshell
         env:
           NAMESPACE: 'acend-webshell'
+          HELM_RELEASE: 'demo-webshell'
         run: |
-          kubectl rollout restart deployment/webshell --kubeconfig $HOME/.kube/config --namespace $NAMESPACE
+          kubectl rollout restart deployment/$HELM_RELEASE --kubeconfig $HOME/.kube/config --namespace $NAMESPACE
