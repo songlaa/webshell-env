@@ -1,5 +1,9 @@
 source /etc/profile
-export PS1='\[\033[01;32m\]\u\[\033[01;96m\]\[\033[01;34m\] \w\[\033[01;33m\]$()\[\033[01;34m\] \$\[\033[00m\] '
+if [ -f "/run/secrets/kubernetes.io/serviceaccount/namespace" ]; then
+  NS=$(cat /run/secrets/kubernetes.io/serviceaccount/namespace)
+fi
+export PS1='\[\033[01;32m\]\u\[\033[01;96m\]($NS)\[\033[01;34m\] \w\[\033[01;33m\]$()\[\033[01;34m\] \$\[\033[00m\] '
+
 alias ls="ls --color"
 alias ll="ls -l"
 find /home/project -name .profile -exec source {} \; 2>/dev/null
