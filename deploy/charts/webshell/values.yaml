@@ -31,7 +31,7 @@ theia:
 
 init:
   image:
-    repository: busybox
+    repository: quay.io/prometheus/busybox
     tag: latest
 
 dind:

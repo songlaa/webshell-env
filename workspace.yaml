@@ -66,7 +66,7 @@ spec:
     spec:
       initContainers:
       - name: welcome-msg
-        image: busybox
+        image: quay.io/prometheus/busybox
         command: ['sh', '-c', "echo Welcome to the acend theia ide > /home/project/welcome"]
         volumeMounts:
         - name: shared-data
