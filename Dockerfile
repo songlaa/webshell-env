@@ -9,6 +9,7 @@ ARG OC_VERSION=4.8
 ARG TERRAFORM_VERSION=1.0.10
 ARG TFENV_VERSION=v2.2.2
 ARG KUSTOMIZE_VERSION=4.4.0
+ARG MINIKUBE_VERSION=1.24.0
 
 USER root
 RUN sed -i "s/3.11/3.14/" /etc/apk/repositories && \
@@ -46,7 +47,11 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     install -t /usr/local/bin oc && rm oc && \
     # Kustomize
     curl -#L "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" | tar -xvz && \
-    install -t /usr/local/bin kustomize && rm kustomize
+    install -t /usr/local/bin kustomize && rm kustomize && \
+    # Minikube
+    curl -#L -o minikube "https://github.com/kubernetes/minikube/releases/download/v${MINIKUBE_VERSION}/minikube-linux-amd64" && \
+    install -t /usr/local/bin minikube && rm minikube
+
 
 RUN git config --global advice.detachedHead false && \
     # tfenv & terraform
