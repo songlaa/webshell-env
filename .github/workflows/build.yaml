@@ -1,4 +1,4 @@
-name: Build Training and Publish
+name: PR Build
 
 on:
   pull_request:
@@ -26,7 +26,7 @@ jobs:
           username: ${{ secrets.QUAYIO_USERNAME }}
           password: ${{ secrets.QUAYIO_TOKEN }}
       -
-        name: Build Latest Version
+        name: Build PR Version
         uses: docker/build-push-action@v2
         with:
           context: .

@@ -1,14 +1,4 @@
-# changeme 
-# Change the following parts to your current installation
-# - entire Docker Build steps accordingly to the amount of different versions or tags your building TRAINING_HUGO_ENV
-#   - Tags
-# - Helm Target Namespace
-# - Name of K8S Deployment to trigger and namespace
-# - Secrets
-#   - QUAYIO_USERNAME and QUAYIO_TOKEN must be set accordingly to your registry, existing users must have access to the repos
-#   - KUBECONFIG content of the Kubeconfig File, Account must have access to the k8s namespace. It's used in the helm steps
-
-name: Publish Main Version
+name: Build latest Version & release Helm Chart
 
 on:
   push:
@@ -68,14 +58,12 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          # changeme
           tags: |
             quay.io/acend/theia:latest
       -
         name: Run vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          # changeme
           image-ref: 'quay.io/acend/theia:latest'
           format: 'table'
           output: 'trivy-results.txt'
@@ -89,44 +77,3 @@ jobs:
         with:
           name: trivy-results-main
           path: trivy-results.txt
-  deploy:
-    needs: [release-helmchart, build]
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-      - 
-        name: 'Install Helm'
-        uses: azure/setup-helm@v1
-        with:
-          version: v3.6.2
-      - 
-        name: Install Kubectl
-        uses: azure/setup-kubectl@v1
-        with:
-          version: v1.21.2
-      - 
-        name: Create KUBECONFIG
-        env:
-          KUBE_CONFIG: '${{ secrets.KUBECONFIG }}'
-        run: |
-          mkdir -p $HOME/.kube
-          echo "$KUBE_CONFIG" > $HOME/.kube/config
-      - 
-        name: Deploy Helm Release
-        env:
-          HELM_RELEASE: 'demo-webshell'
-          NAMESPACE: 'acend-webshell'
-          PASSWORD: '${{ secrets.WEBSHELL_TEST_PASSWORD }}'
-        run: |
-          helm upgrade $HELM_RELEASE webshell --install --wait --kubeconfig $HOME/.kube/config  --namespace=$NAMESPACE  --repo=https://acend.github.io/webshell-env/  --set password=$PASSWORD --values=helm-chart/values.yaml --atomic
-      - 
-        name: Redeploy Webshell
-        env:
-          NAMESPACE: 'acend-webshell'
-          HELM_RELEASE: 'demo-webshell'
-        run: |
-          kubectl rollout restart deployment/$HELM_RELEASE --kubeconfig $HOME/.kube/config --namespace $NAMESPACE
