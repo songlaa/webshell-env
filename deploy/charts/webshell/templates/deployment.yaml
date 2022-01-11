@@ -109,7 +109,7 @@ spec:
           claimName: {{ include "webshell.fullname" . }}
       {{- else }}
         emptyDir: {}
-      {{- end -}}
+      {{- end }}
       - name: docker-volume
       {{- if .Values.dind.persistence.enabled }}
         persistentVolumeClaim:
