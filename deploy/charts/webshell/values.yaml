@@ -27,7 +27,7 @@ theia:
   persistence:
     enabled: false
     pvcsize: 1Gi
-    storageclass: cloudscale-volume-bulk
+    storageclass: cloudscale-volume-ssd
 
 init:
   image:
@@ -40,6 +40,10 @@ dind:
     repository: docker
     tag: 20.10.11-dind
   resources: {}
+  persistence:
+    enabled: false
+    pvcsize: 50Gi
+    storageclass: cloudscale-volume-ssd
 
 imagePullSecrets: []
 nameOverride: ""

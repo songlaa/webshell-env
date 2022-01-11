@@ -87,6 +87,8 @@ spec:
           volumeMounts:
           - name: shared-data
             mountPath: /home/project
+          - name: docker-volume
+            mountPath: /var/lib/docker
           {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -105,6 +107,13 @@ spec:
       {{- if .Values.theia.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ include "webshell.fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}
+      - name: docker-volume
+      {{- if .Values.dind.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ include "webshell.fullname" . }}-docker
       {{- else }}
         emptyDir: {}
       {{- end -}}
