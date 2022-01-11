@@ -1,9 +1,8 @@
 name: Build & deploy Release Version
 
 on:
-  push:
-    tags:
-    - 'webshell-*' # This is created when push on main when Helm Chart version was changed
+  release:
+    types: [published]
 
 jobs:
   build:
