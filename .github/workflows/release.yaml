@@ -1,9 +1,8 @@
 name: Build & deploy Release Version
 
 on:
-  push:
-    tags:
-    - 'webshell-*' # This is created when push on main when Helm Chart version was changed
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -29,6 +28,14 @@ jobs:
           password: ${{ secrets.QUAYIO_TOKEN }}
 
       - 
+        name: Log in to the ghcr.io Container registry
+        uses: docker/login-action@5fcefb941de79536616e9422226e33fd39f1706f
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - 
         name: Get the version # strip away "ref/tags/webshell-"
         id: get_version
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3 | sed 's/webshell-//g')
@@ -42,6 +49,7 @@ jobs:
           push: true
           tags: |
             quay.io/acend/theia:${{ steps.get_version.outputs.VERSION }}
+            ghcr.io/acend/theia:${{ steps.get_version.outputs.VERSION }}
       -
         name: Run vulnerability scanner
         uses: aquasecurity/trivy-action@master
