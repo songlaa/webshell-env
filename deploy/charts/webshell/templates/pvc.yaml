@@ -14,19 +14,3 @@ spec:
       storage: "{{ .Values.theia.persistence.pvcsize }}"
   storageClassName: {{ .Values.theia.persistence.storageclass }}
 {{- end }}
-{{- if .Values.dind.persistence.enabled -}}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ include "webshell.fullname" . }}-docker
-  labels:
-    {{- include "webshell.labels" . | nindent 4 }}
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: "{{ .Values.dind.persistence.pvcsize }}"
-  storageClassName: {{ .Values.dind.persistence.storageclass }}
-{{- end }}
