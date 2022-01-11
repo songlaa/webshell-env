@@ -1,8 +1,9 @@
-name: Build & deploy Release Version
+name: Build & deploy released Version
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+    - webshell-*
 
 jobs:
   build:

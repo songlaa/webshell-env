@@ -53,7 +53,7 @@ jobs:
           password: ${{ secrets.QUAYIO_TOKEN }}
 
       - 
-        name: Log in to the ghcr.io Container registry
+        name: Login to the ghcr.io Container registry
         uses: docker/login-action@5fcefb941de79536616e9422226e33fd39f1706f
         with:
           registry: ghcr.io
