@@ -3,7 +3,7 @@ name: Build & deploy released Version
 on:
   push:
     tags:
-    - '*'
+    - 'webshell-*'
 
 jobs:
   build:
