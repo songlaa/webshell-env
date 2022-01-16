@@ -1,21 +1,39 @@
-FROM quay.io/acend/theia-original
+FROM node:12-alpine3.15
 
-ARG ARGOCD_VERSION=2.1.2
-ARG AZURECLI_VERSION=2.28.0
-ARG DOCKER_COMPOSE=1.29.2
-ARG HELM_VERSION=3.7.0
-ARG KUBECTL_VERSION=1.22.2
+RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev
+
+WORKDIR /home/theia
+ADD package.json ./package.json
+
+ARG GITHUB_TOKEN
+RUN yarn --pure-lockfile && \
+    NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
+    yarn theia download:plugins && \
+    yarn --production && \
+    yarn autoclean --init && \
+    echo *.ts >> .yarnclean && \
+    echo *.ts.map >> .yarnclean && \
+    echo *.spec.* >> .yarnclean && \
+    yarn autoclean --force && \
+    yarn cache clean
+
+FROM node:12-alpine3.15
+
+ARG ARGOCD_VERSION=2.2.2
+ARG AZURECLI_VERSION=2.32.0
+ARG DOCKER_COMPOSE=2.2.3
+ARG HELM_VERSION=3.7.2
+ARG KUBECTL_VERSION=1.23.1
 ARG OC_VERSION=4.8
-ARG TERRAFORM_VERSION=1.0.10
+ARG TERRAFORM_VERSION=1.1.3
 ARG TFENV_VERSION=v2.2.2
-ARG KUSTOMIZE_VERSION=4.4.0
+ARG KUSTOMIZE_VERSION=4.4.1
 ARG MINIKUBE_VERSION=1.24.0
 
-USER root
-RUN sed -i "s/3.11/3.14/" /etc/apk/repositories && \
-    apk --no-cache update && \
+RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
-    apk --no-cache add coreutils grep bash curl gettext vim tree git p7zip gcompat \
+    apk add --no-cache git openssh-client-default bash libsecret \
+                       coreutils grep curl gettext vim tree git p7zip gcompat \
                        docker-cli mysql-client lynx bind-tools figlet jq \
                        bash-completion docker-bash-completion git-bash-completion \
 		       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel
@@ -52,6 +70,12 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     curl -#L -o minikube "https://github.com/kubernetes/minikube/releases/download/v${MINIKUBE_VERSION}/minikube-linux-amd64" && \
     install -t /usr/local/bin minikube && rm minikube
 
+RUN addgroup theia && \
+    adduser -G theia -s /bin/sh -D theia && \
+    chmod g+rw /home && \
+    mkdir -p /home/project && \
+    chown -R theia:theia /home/theia && \
+    chown -R theia:theia /home/project
 
 RUN git config --global advice.detachedHead false && \
     # tfenv & terraform
@@ -60,5 +84,16 @@ RUN git config --global advice.detachedHead false && \
     tfenv install ${TERRAFORM_VERSION} && \
     tfenv use ${TERRAFORM_VERSION}
 
+ENV HOME /home/theia
+WORKDIR /home/theia
+
+COPY --from=0 --chown=theia:theia /home/theia /home/theia
+EXPOSE 3000
+
+ENV SHELL=/bin/bash \
+    THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins
+ENV USE_LOCAL_GIT true
+
 USER theia
 COPY bashrc /home/theia/.bashrc
+ENTRYPOINT [ "node", "/home/theia/src-gen/backend/main.js", "/home/project", "--hostname=0.0.0.0" ]
