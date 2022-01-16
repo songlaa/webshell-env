@@ -29,7 +29,7 @@ jobs:
         with:
           charts_dir: deploy/charts
         env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_TOKEN: "${{ secrets.GH_PAT_REPO }}"
   build:
     runs-on: ubuntu-latest
     steps:
@@ -51,6 +51,15 @@ jobs:
           registry: quay.io
           username: ${{ secrets.QUAYIO_USERNAME }}
           password: ${{ secrets.QUAYIO_TOKEN }}
+
+      - 
+        name: Login to the ghcr.io Container registry
+        uses: docker/login-action@5fcefb941de79536616e9422226e33fd39f1706f
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       -
         name: Build Latest Version
         uses: docker/build-push-action@v2
@@ -60,6 +69,7 @@ jobs:
           push: true
           tags: |
             quay.io/acend/theia:latest
+            ghcr.io/acend/theia:latest
       -
         name: Run vulnerability scanner
         uses: aquasecurity/trivy-action@master
