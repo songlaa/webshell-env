@@ -25,7 +25,7 @@ ARG DOCKER_COMPOSE=2.2.3
 ARG HELM_VERSION=3.7.2
 ARG KUBECTL_VERSION=1.23.1
 ARG OC_VERSION=4.8
-ARG TERRAFORM_VERSION=1.1.3
+ARG TERRAFORM_VERSION=1.1.4
 ARG TFENV_VERSION=v2.2.2
 ARG KUSTOMIZE_VERSION=4.4.1
 ARG MINIKUBE_VERSION=1.24.0
@@ -33,10 +33,11 @@ ARG MINIKUBE_VERSION=1.24.0
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
     apk add --no-cache git openssh-client-default bash libsecret \
+                       zsh zsh-autosuggestions \
                        coreutils grep curl gettext vim tree git p7zip gcompat \
                        docker-cli mysql-client lynx bind-tools figlet jq \
                        bash-completion docker-bash-completion git-bash-completion \
-		       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel
+                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
