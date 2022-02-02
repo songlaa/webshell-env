@@ -56,7 +56,7 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     curl -#L https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz | tar -xvz --strip-components=1 linux-amd64/helm && \
     install -t /usr/local/bin helm && rm helm && \
     # docker-compose
-    curl -L# -o docker-compose https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE/docker-compose-Linux-x86_64 && \
+    curl -L# -o docker-compose https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE/docker-compose-Linux-x86_64 && \
     install -t /usr/local/bin docker-compose && rm docker-compose && \
     # Argo CD
     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64 && \
