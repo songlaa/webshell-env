@@ -31,7 +31,10 @@ spec:
       - name: welcome-msg
         image: "{{ .Values.init.image.repository }}:{{ .Values.init.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command: ['sh', '-c', "echo Welcome to the acend theia ide > /home/project/welcome"]
+        {{- with .Values.init.command }}
+        command: 
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: shared-data
           mountPath: /home/project
