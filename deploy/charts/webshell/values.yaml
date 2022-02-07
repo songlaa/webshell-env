@@ -33,6 +33,10 @@ init:
   image:
     repository: quay.io/prometheus/busybox
     tag: latest
+  command: 
+  - sh
+  - -c
+  - echo Welcome to the acend theia ide > /home/project/welcome
 
 dind:
   enabled: true
