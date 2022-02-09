@@ -29,6 +29,7 @@ ARG TERRAFORM_VERSION=1.1.5
 ARG TFENV_VERSION=v2.2.2
 ARG KUSTOMIZE_VERSION=4.5.1
 ARG MINIKUBE_VERSION=1.25.1
+ARG CERTMANAGER_VERSION=1.7.1
 
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
@@ -49,15 +50,18 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/sql" && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/web" && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/databoxedge" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/synapse" && \
-    # kubectl
-    curl -#L -o kubectl https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl && \
+    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/synapse"
+
+RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
     install -t /usr/local/bin kubectl && rm kubectl && \
+    # kubectl cm plugin
+    curl -#L "https://github.com/cert-manager/cert-manager/releases/download/v$CERTMANAGER_VERSION/kubectl-cert_manager-linux-amd64.tar.gz" | tar -xvz && \
+    install -t /usr/local/bin kubectl-cert_manager && rm kubectl-cert_manager LICENSES && \
     # helm
-    curl -#L https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz | tar -xvz --strip-components=1 linux-amd64/helm && \
+    curl -#L "https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz" | tar -xvz --strip-components=1 linux-amd64/helm && \
     install -t /usr/local/bin helm && rm helm && \
     # docker-compose
-    curl -L# -o docker-compose https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE/docker-compose-Linux-x86_64 && \
+    curl -L# -o docker-compose "https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE/docker-compose-Linux-x86_64" && \
     install -t /usr/local/bin docker-compose && rm docker-compose && \
     # Argo CD
     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64 && \
