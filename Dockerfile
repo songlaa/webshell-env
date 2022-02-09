@@ -17,7 +17,7 @@ RUN yarn --pure-lockfile && \
     yarn autoclean --force && \
     yarn cache clean
 
-FROM node:12-alpine3.15
+FROM node:16-alpine3.15
 
 ARG ARGOCD_VERSION=2.2.5
 ARG AZURECLI_VERSION=2.32.0
