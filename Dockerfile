@@ -20,7 +20,7 @@ RUN yarn --pure-lockfile && \
 FROM node:12-alpine3.15
 
 ARG ARGOCD_VERSION=2.2.5
-ARG AZURECLI_VERSION=2.33.0
+ARG AZURECLI_VERSION=2.32.0
 ARG DOCKER_COMPOSE=2.2.3
 ARG HELM_VERSION=3.8.0
 ARG KUBECTL_VERSION=1.23.3
@@ -37,7 +37,7 @@ RUN apk --no-cache update && \
                        coreutils grep curl gettext vim tree git p7zip gcompat \
                        docker-cli mysql-client lynx bind-tools figlet jq \
                        bash-completion docker-bash-completion git-bash-completion \
-                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-wheel
+                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-wheel py3-psutil
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
