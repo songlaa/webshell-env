@@ -37,7 +37,7 @@ RUN apk --no-cache update && \
                        coreutils grep curl gettext vim tree git p7zip gcompat \
                        docker-cli mysql-client lynx bind-tools figlet jq \
                        bash-completion docker-bash-completion git-bash-completion \
-                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel
+                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-wheel
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
