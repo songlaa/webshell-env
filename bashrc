@@ -16,6 +16,8 @@ for cmd in argocd helm kubectl oc; do
   source <(${cmd} completion bash)
 done
 
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
 /usr/bin/az.completion.sh
 complete -C /usr/local/bin/terraform terraform
 
