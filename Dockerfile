@@ -1,4 +1,4 @@
-FROM node:12-alpine3.15
+FROM node:16-alpine3.15
 
 RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev
 
@@ -6,10 +6,10 @@ WORKDIR /home/theia
 ADD package.json ./package.json
 
 ARG GITHUB_TOKEN
-RUN yarn --pure-lockfile && \
+RUN yarn --pure-lockfile --ignore-engines && \
     NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
     yarn theia download:plugins && \
-    yarn --production && \
+    yarn --production --ignore-engines && \
     yarn autoclean --init && \
     echo *.ts >> .yarnclean && \
     echo *.ts.map >> .yarnclean && \
@@ -17,27 +17,29 @@ RUN yarn --pure-lockfile && \
     yarn autoclean --force && \
     yarn cache clean
 
-FROM node:12-alpine3.15
+FROM node:16-alpine3.15
 
-ARG ARGOCD_VERSION=2.2.2
+ARG ARGOCD_VERSION=2.2.5
 ARG AZURECLI_VERSION=2.32.0
 ARG DOCKER_COMPOSE=2.2.3
-ARG HELM_VERSION=3.7.2
-ARG KUBECTL_VERSION=1.23.2
+ARG HELM_VERSION=3.8.0
+ARG KUBECTL_VERSION=1.23.3
 ARG OC_VERSION=4.8
-ARG TERRAFORM_VERSION=1.1.4
+ARG TERRAFORM_VERSION=1.1.5
 ARG TFENV_VERSION=v2.2.2
-ARG KUSTOMIZE_VERSION=4.4.1
-ARG MINIKUBE_VERSION=1.24.0
+ARG KUSTOMIZE_VERSION=4.5.1
+ARG MINIKUBE_VERSION=1.25.1
+ARG CERTMANAGER_VERSION=1.7.1
 
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
     apk add --no-cache git openssh-client-default bash libsecret \
-                       zsh zsh-autosuggestions \
+                       zsh zsh-autosuggestions podman buildah \
                        coreutils grep curl gettext vim tree git p7zip gcompat \
-                       docker-cli mysql-client lynx bind-tools figlet jq \
+                       docker-cli mysql-client lynx bind-tools figlet jq libffi \
                        bash-completion docker-bash-completion git-bash-completion \
-                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-psutil py3-wheel
+                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography \
+                       py3-wheel py3-psutil py3-cffi py3-openssl
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
@@ -48,15 +50,18 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/sql" && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/web" && \
     bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/databoxedge" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/synapse" && \
-    # kubectl
-    curl -#L -o kubectl https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl && \
+    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/synapse"
+
+RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
     install -t /usr/local/bin kubectl && rm kubectl && \
+    # kubectl cm plugin
+    curl -#L "https://github.com/cert-manager/cert-manager/releases/download/v$CERTMANAGER_VERSION/kubectl-cert_manager-linux-amd64.tar.gz" | tar -xvz && \
+    install -t /usr/local/bin kubectl-cert_manager && rm kubectl-cert_manager LICENSES && \
     # helm
-    curl -#L https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz | tar -xvz --strip-components=1 linux-amd64/helm && \
+    curl -#L "https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz" | tar -xvz --strip-components=1 linux-amd64/helm && \
     install -t /usr/local/bin helm && rm helm && \
     # docker-compose
-    curl -L# -o docker-compose https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE/docker-compose-Linux-x86_64 && \
+    curl -L# -o docker-compose "https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE/docker-compose-Linux-x86_64" && \
     install -t /usr/local/bin docker-compose && rm docker-compose && \
     # Argo CD
     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64 && \
@@ -83,7 +88,8 @@ RUN git config --global advice.detachedHead false && \
     cd /opt/ && git clone --depth 1 --branch ${TFENV_VERSION} https://github.com/tfutils/tfenv.git 2>/dev/null && \
     ln -s /opt/tfenv/bin/* /usr/local/bin && \
     tfenv install ${TERRAFORM_VERSION} && \
-    tfenv use ${TERRAFORM_VERSION}
+    tfenv use ${TERRAFORM_VERSION} && \
+    sed -i 's/#mount_program/mount_program/' /etc/containers/storage.conf
 
 ENV HOME /home/theia
 WORKDIR /home/theia
