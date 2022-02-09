@@ -8,8 +8,8 @@ ADD package.json ./package.json
 ARG GITHUB_TOKEN
 RUN yarn --pure-lockfile --ignore-engines && \
     NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
-    yarn theia download:plugins --ignore-engines && \
-    yarn --production && \
+    yarn theia download:plugins && \
+    yarn --production --ignore-engines && \
     yarn autoclean --init && \
     echo *.ts >> .yarnclean && \
     echo *.ts.map >> .yarnclean && \
@@ -33,11 +33,12 @@ ARG MINIKUBE_VERSION=1.25.1
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
     apk add --no-cache git openssh-client-default bash libsecret \
-                       zsh zsh-autosuggestions \
+                       zsh zsh-autosuggestions podman buildah \
                        coreutils grep curl gettext vim tree git p7zip gcompat \
-                       docker-cli mysql-client lynx bind-tools figlet jq \
+                       docker-cli mysql-client lynx bind-tools figlet jq libffi \
                        bash-completion docker-bash-completion git-bash-completion \
-                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography py3-wheel py3-psutil py3-cffi
+                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography \
+                       py3-wheel py3-psutil py3-cffi py3-openssl
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
@@ -83,7 +84,8 @@ RUN git config --global advice.detachedHead false && \
     cd /opt/ && git clone --depth 1 --branch ${TFENV_VERSION} https://github.com/tfutils/tfenv.git 2>/dev/null && \
     ln -s /opt/tfenv/bin/* /usr/local/bin && \
     tfenv install ${TERRAFORM_VERSION} && \
-    tfenv use ${TERRAFORM_VERSION}
+    tfenv use ${TERRAFORM_VERSION} && \
+    sed -i 's/#mount_program/mount_program/' /etc/containers/storage.conf
 
 ENV HOME /home/theia
 WORKDIR /home/theia
