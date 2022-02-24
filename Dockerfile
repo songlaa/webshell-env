@@ -24,7 +24,6 @@ ARG AZURECLI_VERSION=2.32.0
 ARG DOCKER_COMPOSE=2.2.3
 ARG HELM_VERSION=3.8.0
 ARG KUBECTL_VERSION=1.23.3
-ARG OC_VERSION=4.8
 ARG TERRAFORM_VERSION=1.1.5
 ARG TFENV_VERSION=v2.2.2
 ARG KUSTOMIZE_VERSION=4.5.1
@@ -76,7 +75,7 @@ RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/relea
     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64 && \
     chmod +x /usr/local/bin/argocd && \
     # oc
-    curl -#L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-${OC_VERSION}/openshift-client-linux.tar.gz | tar -xvz oc && \
+    curl -#L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar -xvz oc && \
     install -t /usr/local/bin oc && rm oc && \
     # Kustomize
     curl -#L "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" | tar -xvz && \
