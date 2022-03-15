@@ -25,10 +25,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "webshell.serviceAccountName" . }}
-      {{- if not .Values.openshift }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- end }}
       initContainers:
       - name: welcome-msg
         image: "{{ .Values.init.image.repository }}:{{ .Values.init.image.tag }}"
@@ -42,10 +40,8 @@ spec:
           mountPath: /home/project
       containers:
         - name: {{ .Chart.Name }}
-          {{- if not .Values.openshift }}
           securityContext:
             {{- toYaml .Values.theia.securityContext | nindent 12 }}
-          {{- end }}
           image: "{{ .Values.theia.image.repository }}:{{ .Values.theia.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
