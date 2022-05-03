@@ -38,7 +38,10 @@ RUN apk --no-cache update && \
                        docker-cli mysql-client lynx bind-tools figlet jq libffi \
                        bash-completion docker-bash-completion git-bash-completion \
                        py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography \
-                       py3-wheel py3-psutil py3-cffi py3-openssl
+                       py3-wheel py3-psutil py3-cffi py3-openssl && \
+    # ugly workaround because of beautyfull azure cli dependicies
+    apk --no-cache add py3-psutil>=5.9 --repository "http://pkg.adfinis.com/alpine/edge/community" && \
+    mv /usr/lib/python3.10/site-packages/* /usr/lib/python3.9/site-packages/
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
