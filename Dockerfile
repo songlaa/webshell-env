@@ -19,26 +19,29 @@ RUN yarn --pure-lockfile --ignore-engines && \
 
 FROM node:16-alpine3.15
 
-ARG ARGOCD_VERSION=2.2.5
-ARG AZURECLI_VERSION=2.32.0
-ARG DOCKER_COMPOSE=2.2.3
-ARG HELM_VERSION=3.8.0
-ARG KUBECTL_VERSION=1.23.3
-ARG TERRAFORM_VERSION=1.1.5
-ARG TFENV_VERSION=v2.2.2
-ARG KUSTOMIZE_VERSION=4.5.1
-ARG MINIKUBE_VERSION=1.25.1
+ARG ARGOCD_VERSION=2.3.3
+ARG AZURECLI_VERSION=2.35.0
+ARG DOCKER_COMPOSE=2.5.0
+ARG HELM_VERSION=3.8.2
+ARG KUBECTL_VERSION=1.23.6
+ARG TERRAFORM_VERSION=1.1.9
+ARG TFENV_VERSION=v2.2.3
+ARG KUSTOMIZE_VERSION=4.5.4
+ARG MINIKUBE_VERSION=1.25.2
 ARG CERTMANAGER_VERSION=1.7.1
 
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
     apk add --no-cache git openssh-client-default bash libsecret \
-                       zsh zsh-autosuggestions podman buildah \
+                       zsh zsh-autosuggestions podman buildah nano \
                        coreutils grep curl gettext vim tree git p7zip gcompat \
                        docker-cli mysql-client lynx bind-tools figlet jq libffi \
                        bash-completion docker-bash-completion git-bash-completion \
                        py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography \
-                       py3-wheel py3-psutil py3-cffi py3-openssl
+                       py3-wheel py3-cffi py3-openssl && \
+    # ugly workaround because of beautyfull azure cli dependicies
+    apk add --no-cache py3-psutil>=5.9 --repository "http://pkg.adfinis.com/alpine/edge/community" && \
+    mv /usr/lib/python3.10/site-packages/* /usr/lib/python3.9/site-packages/
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
