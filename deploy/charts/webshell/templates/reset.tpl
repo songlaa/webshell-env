@@ -22,7 +22,7 @@ spec:
             - restart
             - deployment
             - {{ include "webshell.fullname" . }}
-            image: quay.io/bitnami/kubectl
+            image: docker.io/bitnami/kubectl
             name: reset-webshell
           serviceAccount: reset-cronjob
   schedule: "{{ .Values.reset.schedule }}"
