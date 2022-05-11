@@ -29,6 +29,7 @@ ARG TFENV_VERSION=v2.2.3
 ARG KUSTOMIZE_VERSION=4.5.4
 ARG MINIKUBE_VERSION=1.25.2
 ARG CERTMANAGER_VERSION=1.7.1
+ARG TRIVY_VERSION=0.27.1
 
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
@@ -85,7 +86,10 @@ RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/relea
     install -t /usr/local/bin kustomize && rm kustomize && \
     # Minikube
     curl -#L -o minikube "https://github.com/kubernetes/minikube/releases/download/v${MINIKUBE_VERSION}/minikube-linux-amd64" && \
-    install -t /usr/local/bin minikube && rm minikube
+    install -t /usr/local/bin minikube && rm minikube && \
+    # Trivy
+    curl -#L https://github.com/aquasecurity/trivy/releases/download/v0.27.1/trivy_0.27.1_Linux-64bit.tar.gz | tar -xvz trivy && \
+    install -t /usr/local/bin trivy && rm trivy
 
 RUN addgroup theia && \
     adduser -G theia -s /bin/sh -D theia && \
