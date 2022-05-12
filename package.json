@@ -10,6 +10,7 @@
     "@theia/navigator": "next",
     "@theia/outline-view": "next",
     "@theia/plugin-ext-vscode": "next",
+    "@theia/plugin-ext": "next",
     "@theia/preferences": "next",
     "@theia/preview": "next",
     "@theia/search-in-workspace": "next",
@@ -33,7 +34,8 @@
     "vscode-builtin-docker": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/docker-1.39.1-prel.vsix",
     "terraform": "https://open-vsx.org/api/4ops/terraform/0.2.1/file/4ops.terraform-0.2.1.vsix",
     "yaml.lint": "https://open-vsx.org/api/phil9909/ytt-lint/0.3.1/file/phil9909.ytt-lint-0.3.1.vsix",
-    "md.lint": "https://open-vsx.org/api/DavidAnson/vscode-markdownlint/0.45.0/file/DavidAnson.vscode-markdownlint-0.45.0.vsix"
+    "md.lint": "https://open-vsx.org/api/DavidAnson/vscode-markdownlint/0.45.0/file/DavidAnson.vscode-markdownlint-0.45.0.vsix",
+    "kubernetes": "https://github.com/vscode-kubernetes-tools/vscode-kubernetes-tools/releases/download/1.3.8/vscode-kubernetes-tools-1.3.8.vsix"
   },
   "theiaPluginsExcludeIds": [
     "vscode.extension-editing",
