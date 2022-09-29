@@ -1,4 +1,4 @@
-FROM node:18-alpine3.15
+FROM node:18-alpine3.16
 
 RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev
 
@@ -8,8 +8,9 @@ ADD package.json ./package.json
 ARG GITHUB_TOKEN
 RUN yarn --pure-lockfile --ignore-engines && \
     NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
-    yarn theia download:plugins && \
-    yarn --production --ignore-engines && \
+    yarn theia download:plugins
+
+RUN yarn --production --ignore-engines && \
     yarn autoclean --init && \
     echo *.ts >> .yarnclean && \
     echo *.ts.map >> .yarnclean && \
