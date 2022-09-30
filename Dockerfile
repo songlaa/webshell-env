@@ -1,4 +1,4 @@
-FROM node:18-alpine3.16
+FROM node:18-alpine3.15
 
 RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev
 
