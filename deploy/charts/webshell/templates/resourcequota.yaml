@@ -7,4 +7,4 @@ metadata:
     {{- include "webshell.labels" . | nindent 4 }}
 spec:
   hard:
-    pods: "15"
+    pods: "20"
