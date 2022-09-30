@@ -14,7 +14,10 @@
     "@theia/preview": "next",
     "@theia/search-in-workspace": "next",
     "@theia/terminal": "next",
-    "@theia/vsx-registry": "next"
+    "@theia/vsx-registry": "next",
+    "@theia/plugin-dev": "next",
+    "@theia/plugin-ext": "next",
+    "@theia/plugin-ext-vscode": "next"
   },
   "devDependencies": {
     "@theia/cli": "next"
@@ -30,10 +33,8 @@
   "theiaPluginsDir": "plugins",
   "theiaPlugins": {
     "vscode-builtin-extensions-pack": "https://open-vsx.org/api/eclipse-theia/builtin-extension-pack/1.50.1/file/eclipse-theia.builtin-extension-pack-1.50.1.vsix",
-    "vscode-builtin-docker": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/docker-1.39.1-prel.vsix",
     "terraform": "https://open-vsx.org/api/4ops/terraform/0.2.1/file/4ops.terraform-0.2.1.vsix",
-    "yaml.lint": "https://open-vsx.org/api/phil9909/ytt-lint/0.3.1/file/phil9909.ytt-lint-0.3.1.vsix",
-    "md.lint": "https://open-vsx.org/api/DavidAnson/vscode-markdownlint/0.45.0/file/DavidAnson.vscode-markdownlint-0.45.0.vsix"
+    "yaml.lint": "https://open-vsx.org/api/phil9909/ytt-lint/0.3.1/file/phil9909.ytt-lint-0.3.1.vsix"
   },
   "theiaPluginsExcludeIds": [
     "vscode.extension-editing",
@@ -41,6 +42,7 @@
     "vscode.git-ui",
     "vscode.github",
     "vscode.markdown-language-features",
-    "vscode.microsoft-authentication"
+    "vscode.microsoft-authentication",
+    "ms-vscode.js-debug-companion"
   ]
 }
