@@ -29,7 +29,7 @@ build() {
 test_image() {
     echo -e "\nTest:\n"
     set -e
-    docker run -d --rm -p 3000:3000 --name $APP $ORG/$APP:$VER
+    docker run -d --rm -p 3000:3000 --name $APP $ORG/$APP
     docker images | grep $APP
     sleep 15
 
