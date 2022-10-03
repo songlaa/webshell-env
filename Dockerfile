@@ -1,4 +1,4 @@
-FROM node:18-alpine3.15
+FROM node:18-alpine3.16
 
 RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev
 
@@ -18,19 +18,18 @@ RUN yarn --production --ignore-engines && \
     yarn autoclean --force && \
     yarn cache clean
 
-FROM node:18-alpine3.15
+FROM node:18-alpine3.16
 
-ARG ARGOCD_VERSION=2.3.3
-ARG AZURECLI_VERSION=2.35.0
-ARG DOCKER_COMPOSE=2.5.0
-ARG HELM_VERSION=3.8.2
-ARG KUBECTL_VERSION=1.24.2
-ARG TERRAFORM_VERSION=1.1.9
-ARG TFENV_VERSION=v2.2.3
-ARG KUSTOMIZE_VERSION=4.5.4
-ARG MINIKUBE_VERSION=1.25.2
-ARG CERTMANAGER_VERSION=1.7.1
-ARG TRIVY_VERSION=0.27.1
+ARG ARGOCD_VERSION=2.4.12
+ARG AZURECLI_VERSION=2.40.0
+ARG DOCKER_COMPOSE=2.10.2
+ARG HELM_VERSION=3.10.0
+ARG KUBECTL_VERSION=1.24.6
+ARG TERRAFORM_VERSION=1.3.1
+ARG TFENV_VERSION=v3.0.0
+ARG KUSTOMIZE_VERSION=4.5.7
+ARG MINIKUBE_VERSION=1.27.0
+ARG TRIVY_VERSION=0.32.1
 
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
@@ -40,21 +39,18 @@ RUN apk --no-cache update && \
                        docker-cli mysql-client lynx bind-tools figlet jq libffi \
                        bash-completion docker-bash-completion git-bash-completion \
                        py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography \
-                       py3-wheel py3-cffi py3-openssl && \
-    # ugly workaround because of beautyfull azure cli dependicies
-    apk add --no-cache py3-psutil>=5.9 --repository "http://pkg.adfinis.com/alpine/edge/community" && \
-    mv /usr/lib/python3.10/site-packages/* /usr/lib/python3.9/site-packages/
+                       py3-wheel py3-cffi py3-openssl py3-psutil>=5.9
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/network/v201*" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/network/v2020*" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/cosmosdb" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/iothub" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/sql" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/web" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/databoxedge" && \
-    bash -c "rm -rf /usr/lib/python3.9/site-packages/azure/mgmt/synapse"
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/network/v201*" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/network/v2020*" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/cosmosdb" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/iothub" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/sql" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/web" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/databoxedge" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/synapse"
 
 RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
     install -t /usr/local/bin kubectl && rm kubectl && \

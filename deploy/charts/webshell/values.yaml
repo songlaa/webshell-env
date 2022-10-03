@@ -42,7 +42,7 @@ dind:
   enabled: true
   image:
     repository: docker
-    tag: 20.10.15-dind
+    tag: 20.10.18-dind
   resources: {}
   persistence:
     enabled: false
