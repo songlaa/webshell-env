@@ -21,4 +21,11 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 /usr/bin/az.completion.sh
 complete -C /usr/local/bin/terraform terraform
 
-figlet -w 120 welcome @ acend
+if [ ! -f "~/.kube/config" ]; then
+  kubectl config set-cluster local --server="https://kubernetes.default" --certificate-authority "/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+  kubectl config set-credentials local --token="$(cat /run/secrets/kubernetes.io/serviceaccount/token)"
+  kubectl config set-context local --cluster "local" --user "local"
+  kubectl config set-context local --namespace="$STUDENT"
+fi
+
+clear && figlet -w 120 welcome @ acend

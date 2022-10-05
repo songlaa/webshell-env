@@ -52,6 +52,8 @@ RUN apk --no-cache update && \
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/containerservice/v201*" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/compute/v201*" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/network/v201*" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/network/v2020*" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/cosmosdb" && \
