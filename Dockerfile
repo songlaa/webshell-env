@@ -21,22 +21,22 @@ RUN yarn --production --ignore-engines && \
 FROM node:18-alpine3.16
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARG ARGOCD_VERSION=2.4.12
+ARG ARGOCD_VERSION=v2.4.12
 # renovate: datasource=github-tags depName=Azure/azure-cli
 ARG AZURECLI_VERSION=2.40.0
 # renovate: datasource=github-tags depName=docker/compose
-ARG DOCKER_COMPOSE=2.10.2
+ARG DOCKER_COMPOSE=v2.10.2
 # renovate: datasource=github-tags depName=helm/helm
-ARG HELM_VERSION=3.10.0
+ARG HELM_VERSION=v3.10.0
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION=1.24.6
+ARG KUBECTL_VERSION=v1.24.6
 # renovate: datasource=github-tags depName=hashicorp/terraform
 ARG TERRAFORM_VERSION=1.3.1
 # renovate: datasource=github-tags depName=tfutils/tfenv
 ARG TFENV_VERSION=v3.0.0
-ARG KUSTOMIZE_VERSION=4.5.7
+ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
-ARG MINIKUBE_VERSION=1.27.0
+ARG MINIKUBE_VERSION=v1.27.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=0.32.1
 
@@ -61,7 +61,7 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/databoxedge" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/synapse"
 
-RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
+RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -t /usr/local/bin kubectl && rm kubectl && \
     # krew 
     curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
@@ -76,25 +76,25 @@ RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/relea
     kubectl krew install get-all && \
     kubectl krew install modify-secret && \
     # helm
-    curl -#L "https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz" | tar -xvz --strip-components=1 linux-amd64/helm && \
+    curl -#L "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" | tar -xvz --strip-components=1 linux-amd64/helm && \
     install -t /usr/local/bin helm && rm helm && \
     # docker-compose
-    curl -L# -o docker-compose "https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE/docker-compose-Linux-x86_64" && \
+    curl -L# -o docker-compose "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE}/docker-compose-Linux-x86_64" && \
     install -t /usr/local/bin docker-compose && rm docker-compose && \
     # Argo CD
-    curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64 && \
+    curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64 && \
     chmod +x /usr/local/bin/argocd && \
     # oc
     curl -#L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar -xvz oc && \
     install -t /usr/local/bin oc && rm oc && \
     # Kustomize
-    curl -#L "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" | tar -xvz && \
+    curl -#L "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" | tar -xvz && \
     install -t /usr/local/bin kustomize && rm kustomize && \
     # Minikube
-    curl -#L -o minikube "https://github.com/kubernetes/minikube/releases/download/v${MINIKUBE_VERSION}/minikube-linux-amd64" && \
+    curl -#L -o minikube "https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64" && \
     install -t /usr/local/bin minikube && rm minikube && \
     # Trivy
-    curl -#L https://github.com/aquasecurity/trivy/releases/download/v0.27.1/trivy_0.27.1_Linux-64bit.tar.gz | tar -xvz trivy && \
+    curl -#L "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz" | tar -xvz trivy && \
     install -t /usr/local/bin trivy && rm trivy
 
 RUN addgroup theia && \
