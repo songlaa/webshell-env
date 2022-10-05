@@ -2,17 +2,17 @@
   "extends": [
     "config:base"
   ],
-  regexManagers: [
+  "regexManagers": [
     {
-      description: "Update ARG versions of services in Dockerfiles",
-      fileMatch: [
+      "description": "Update ARG versions of services in Dockerfiles",
+      "fileMatch": [
         "(^|/|\\.)Dockerfile$",
         "(^|/)Dockerfile\\.[^/]*$"
       ],
-      matchStrings: [
+      "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\sARG .*?_VERSION=(?<currentValue>.*)\\s"
       ],
-      versioningTemplate: "docker"
+      "versioningTemplate": "docker"
     }
   ]
 }
