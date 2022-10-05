@@ -21,7 +21,7 @@ RUN yarn --production --ignore-engines && \
 FROM node:18-alpine3.16
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARG ARGOCD_VERSION=v2.4.12
+ARG ARGOCD_VERSION=v2.4.14
 # renovate: datasource=github-tags depName=Azure/azure-cli
 ARG AZURECLI_VERSION=2.40.0
 # renovate: datasource=github-tags depName=docker/compose
@@ -29,7 +29,7 @@ ARG DOCKER_COMPOSE=v2.10.2
 # renovate: datasource=github-tags depName=helm/helm
 ARG HELM_VERSION=v3.10.0
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION=v1.24.6
+ARG KUBECTL_VERSION=v1.25.2
 # renovate: datasource=github-tags depName=hashicorp/terraform
 ARG TERRAFORM_VERSION=1.3.1
 # renovate: datasource=github-tags depName=tfutils/tfenv
@@ -52,6 +52,8 @@ RUN apk --no-cache update && \
 
 RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/containerservice/v201*" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/compute/v201*" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/network/v201*" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/network/v2020*" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/cosmosdb" && \
