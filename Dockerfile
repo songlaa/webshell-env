@@ -31,7 +31,7 @@ ARG HELM_VERSION=v3.10.0
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=v1.25.2
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=1.3.1
+ARG TERRAFORM_VERSION=v1.3.2
 # renovate: datasource=github-tags depName=tfutils/tfenv
 ARG TFENV_VERSION=v3.0.0
 ARG KUSTOMIZE_VERSION=v4.5.7
@@ -42,7 +42,7 @@ ARG TRIVY_VERSION=0.32.1
 
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
-    apk add --no-cache git openssh-client-default bash libsecret \
+    apk add --no-cache git openssh-client-default bash libsecret chromium \
                        zsh zsh-autosuggestions podman buildah nano \
                        coreutils grep curl gettext vim tree git p7zip gcompat \
                        docker-cli mysql-client lynx bind-tools figlet jq libffi \
@@ -110,8 +110,9 @@ RUN git config --global advice.detachedHead false && \
     # tfenv & terraform
     cd /opt/ && git clone --depth 1 --branch ${TFENV_VERSION} https://github.com/tfutils/tfenv.git 2>/dev/null && \
     ln -s /opt/tfenv/bin/* /usr/local/bin && \
-    tfenv install ${TERRAFORM_VERSION} && \
-    tfenv use ${TERRAFORM_VERSION} && \
+    export TFENV_TERRAFORM_VERSION=$(echo $TERRAFORM_VERSION | sed -e "s/v//") && \
+    tfenv install && \
+    tfenv use && \
     sed -i 's/#mount_program/mount_program/' /etc/containers/storage.conf
 
 ENV HOME /home/theia

@@ -47,6 +47,7 @@
     "golang": "https://open-vsx.org/api/vscode/go/1.62.3/file/vscode.go-1.62.3.vsix",
     "python": "https://open-vsx.org/api/vscode/python/1.62.3/file/vscode.python-1.62.3.vsix",
     "docker": "https://open-vsx.org/api/vscode/docker/1.62.3/file/vscode.docker-1.62.3.vsix",
+    "browser": "https://open-vsx.org/api/antfu/browse-lite/0.3.0/file/antfu.browse-lite-0.3.0.vsix",
     "dockerfile": "https://open-vsx.org/api/jeff-hykin/better-dockerfile-syntax/1.0.2/file/jeff-hykin.better-dockerfile-syntax-1.0.2.vsix",
     "markdown": "https://open-vsx.org/api/vscode/markdown/1.62.3/file/vscode.markdown-1.62.3.vsix",
     "terraform": "https://open-vsx.org/api/4ops/terraform/0.2.1/file/4ops.terraform-0.2.1.vsix",
