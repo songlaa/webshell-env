@@ -36,7 +36,7 @@ ARG TERRAFORM_VERSION=v1.3.2
 ARG TFENV_VERSION=v3.0.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
-ARG MINIKUBE_VERSION=v1.27.0
+ARG MINIKUBE_VERSION=v1.27.1
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=0.32.1
 
