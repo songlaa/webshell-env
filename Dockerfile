@@ -31,12 +31,12 @@ ARG HELM_VERSION=v3.10.0
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=v1.25.2
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=1.3.1
+ARG TERRAFORM_VERSION=v1.3.2
 # renovate: datasource=github-tags depName=tfutils/tfenv
 ARG TFENV_VERSION=v3.0.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
-ARG MINIKUBE_VERSION=v1.27.0
+ARG MINIKUBE_VERSION=v1.27.1
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=0.32.1
 
