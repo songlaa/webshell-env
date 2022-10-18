@@ -1,4 +1,4 @@
-FROM node:18-alpine3.16
+FROM node:19-alpine3.16
 
 RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev
 
@@ -18,10 +18,10 @@ RUN yarn --production --ignore-engines && \
     yarn autoclean --force && \
     yarn cache clean
 
-FROM node:18-alpine3.16
+FROM node:19-alpine3.16
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARG ARGOCD_VERSION=v2.4.14
+ARG ARGOCD_VERSION=v2.4.15
 # renovate: datasource=github-tags depName=Azure/azure-cli
 ARG AZURECLI_VERSION=2.40.0
 # renovate: datasource=github-tags depName=docker/compose
