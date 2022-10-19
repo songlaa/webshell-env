@@ -1,27 +1,15 @@
 # theia-env
-Creates a theia runtime for x students in Kubernetes itself
 
-## setup.sh
-This script can be started locally against a configured k8s cluster.
+Creates a theia based webshell runtime in kubernetes itself
 
-Run it with the options:
-- build      (build container and push it to registry)
-- deploy     (deploy trainer and students container)
-- destroy    (delete student deployments and services only)
-- destroyall (delete student namespaces together with the lets encrypt certs)
+## build.sh
 
-It creates a theia webconsole for the amount of student given in the setup.sh script.
-The entry is protected with basic-auth and https with letsencrypt.
+This script can be started locally to build and test.
 
-Content:
-- extended theia webconsole
-- docker in docker
-
-For number of given users in variables it creates an own workspace with the convention:
-- student1
-- student2
-- student3
-- ...
+```bash
+./build.sh
+docker run --rm -p 3000:3000 --name theia acend/theia
+```
 
 ## Deploy using Helm Chart
 
