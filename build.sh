@@ -17,7 +17,7 @@ build() {
     echo -e "\nBuild:\n"
     set -e
     if [ -n "$(which docker)" ]; then
-        docker build -t $ORG/$APP .
+        DOCKER_BUILDKIT=1 docker build -t $ORG/$APP .
         test_image
         docker push $ORG/$APP
     elif [ -n "$(which buildah)" ]; then

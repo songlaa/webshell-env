@@ -45,14 +45,14 @@
     "yaml": "https://open-vsx.org/api/vscode/yaml/1.62.3/file/vscode.yaml-1.62.3.vsix",
     "shell": "https://open-vsx.org/api/vscode/shellscript/1.62.3/file/vscode.shellscript-1.62.3.vsix",
     "golang": "https://open-vsx.org/api/vscode/go/1.62.3/file/vscode.go-1.62.3.vsix",
+    "browser": "https://open-vsx.org/api/antfu/browse-lite/0.3.0/file/antfu.browse-lite-0.3.0.vsix",
     "python": "https://open-vsx.org/api/vscode/python/1.62.3/file/vscode.python-1.62.3.vsix",
     "docker": "https://open-vsx.org/api/vscode/docker/1.62.3/file/vscode.docker-1.62.3.vsix",
     "browser": "https://open-vsx.org/api/antfu/browse-lite/0.3.0/file/antfu.browse-lite-0.3.0.vsix",
     "dockerfile": "https://open-vsx.org/api/jeff-hykin/better-dockerfile-syntax/1.0.2/file/jeff-hykin.better-dockerfile-syntax-1.0.2.vsix",
     "markdown": "https://open-vsx.org/api/vscode/markdown/1.62.3/file/vscode.markdown-1.62.3.vsix",
     "terraform": "https://open-vsx.org/api/4ops/terraform/0.2.1/file/4ops.terraform-0.2.1.vsix",
-    "yaml.lint": "https://open-vsx.org/api/phil9909/ytt-lint/0.3.1/file/phil9909.ytt-lint-0.3.1.vsix",
-    "kubernetes": "https://github.com/vscode-kubernetes-tools/vscode-kubernetes-tools/releases/download/1.3.8/vscode-kubernetes-tools-1.3.8.vsix"
+    "yaml.lint": "https://open-vsx.org/api/phil9909/ytt-lint/0.3.1/file/phil9909.ytt-lint-0.3.1.vsix"
   },
   "theiaPluginsExcludeIds": [
     "ms-vscode.js-debug-companion",
