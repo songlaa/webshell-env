@@ -40,17 +40,24 @@ ARG MINIKUBE_VERSION=v1.27.1
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=0.32.1
 
+RUN addgroup theia && \
+    adduser -G theia -s /bin/sh -D theia && \
+    chmod g+rw /home && \
+    mkdir -p /home/project && \
+    chown -R theia:theia /home/theia && \
+    chown -R theia:theia /home/project
+
 RUN apk --no-cache update && \
     apk --no-cache -U upgrade -a && \
-    apk add --no-cache git openssh-client-default bash libsecret \
+    apk add --no-cache git openssh-client-default bash libsecret chromium \
                        zsh zsh-autosuggestions podman buildah nano \
                        coreutils grep curl gettext vim tree git p7zip gcompat \
                        docker-cli mysql-client lynx bind-tools figlet jq libffi \
                        bash-completion docker-bash-completion git-bash-completion \
                        py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography \
-                       py3-wheel py3-cffi py3-openssl py3-psutil>=5.9
-
-RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
+                       py3-wheel py3-cffi py3-openssl py3-psutil>=5.9 && \
+    # azure
+    pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/containerservice/v201*" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/compute/v201*" && \
@@ -61,9 +68,9 @@ RUN pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/sql" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/web" && \
     bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/databoxedge" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/synapse"
-
-RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
+    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/synapse" && \
+    # kubectl
+    curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -t /usr/local/bin kubectl && rm kubectl && \
     # krew 
     curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
@@ -97,33 +104,25 @@ RUN curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/relea
     install -t /usr/local/bin minikube && rm minikube && \
     # Trivy
     curl -#L "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz" | tar -xvz trivy && \
-    install -t /usr/local/bin trivy && rm trivy
-
-RUN addgroup theia && \
-    adduser -G theia -s /bin/sh -D theia && \
-    chmod g+rw /home && \
-    mkdir -p /home/project && \
-    chown -R theia:theia /home/theia && \
-    chown -R theia:theia /home/project
-
-RUN git config --global advice.detachedHead false && \
+    install -t /usr/local/bin trivy && rm trivy && \
+    # terraform
+    git config --global advice.detachedHead false && \
     # tfenv & terraform
     cd /opt/ && git clone --depth 1 --branch ${TFENV_VERSION} https://github.com/tfutils/tfenv.git 2>/dev/null && \
     ln -s /opt/tfenv/bin/* /usr/local/bin && \
-    tfenv install ${TERRAFORM_VERSION} && \
-    tfenv use ${TERRAFORM_VERSION} && \
+    export TFENV_TERRAFORM_VERSION=$(echo $TERRAFORM_VERSION | sed -e "s/v//") && \
+    tfenv install && \
+    tfenv use && \
     sed -i 's/#mount_program/mount_program/' /etc/containers/storage.conf
 
-ENV HOME /home/theia
-WORKDIR /home/theia
-
 COPY --from=0 --chown=theia:theia /home/theia /home/theia
-EXPOSE 3000
 
 ENV SHELL=/bin/bash \
-    THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins
-ENV USE_LOCAL_GIT true
+    THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins \
+    THEIA_WEBVIEW_EXTERNAL_ENDPOINT='{{uuid}}.{{hostname}}'\
+    USE_LOCAL_GIT=true
 
 USER theia
+EXPOSE 3000
 COPY bashrc /home/theia/.bashrc
 ENTRYPOINT [ "node", "/home/theia/src-gen/backend/main.js", "/home/project", "--hostname=0.0.0.0" ]
