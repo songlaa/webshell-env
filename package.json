@@ -36,7 +36,8 @@
     "frontend": {
       "config": {
         "defaultTheme": "dark"
-      }
+      },
+      "warnOnPotentiallyInsecureHostPattern": false
     }
   },
   "theiaPluginsDir": "plugins",
