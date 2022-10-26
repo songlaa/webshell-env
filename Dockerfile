@@ -38,7 +38,7 @@ ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
 ARG MINIKUBE_VERSION=v1.27.1
 # renovate: datasource=github-tags depName=aquasecurity/trivy
-ARG TRIVY_VERSION=0.32.1
+ARG TRIVY_VERSION=v0.32.1
 
 ADD package.json /package.json
 RUN addgroup theia && \
@@ -104,7 +104,7 @@ RUN apk --no-cache update && \
     curl -#L -o minikube "https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64" && \
     install -t /usr/local/bin minikube && rm minikube && \
     # Trivy
-    curl -#L "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz" | tar -xvz trivy && \
+    curl -#L "https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION#v}_Linux-64bit.tar.gz" | tar -xvz trivy && \
     install -t /usr/local/bin trivy && rm trivy && \
     # terraform
     git config --global advice.detachedHead false && \
