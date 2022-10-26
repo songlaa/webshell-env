@@ -40,6 +40,7 @@ ARG MINIKUBE_VERSION=v1.27.1
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=0.32.1
 
+ADD package.json /package.json
 RUN addgroup theia && \
     adduser -G theia -s /bin/sh -D theia && \
     chmod g+rw /home && \
@@ -119,7 +120,6 @@ COPY --from=0 --chown=theia:theia /home/theia /home/theia
 
 ENV SHELL=/bin/bash \
     THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins \
-    THEIA_WEBVIEW_EXTERNAL_ENDPOINT='{{uuid}}.{{hostname}}'\
     USE_LOCAL_GIT=true
 
 USER theia
