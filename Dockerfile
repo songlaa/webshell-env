@@ -38,7 +38,7 @@ ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
 ARG MINIKUBE_VERSION=v1.27.1
 # renovate: datasource=github-tags depName=aquasecurity/trivy
-ARG TRIVY_VERSION=v0.33.0
+ARG TRIVY_VERSION=v0.34.0
 
 ADD package.json /package.json
 RUN addgroup theia && \
