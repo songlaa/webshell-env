@@ -21,7 +21,7 @@ RUN yarn --production --ignore-engines && \
 FROM node:19-alpine3.16
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARG ARGOCD_VERSION=v2.5.0
+ARG ARGOCD_VERSION=v2.5.1
 # renovate: datasource=github-tags depName=Azure/azure-cli
 ARG AZURECLI_VERSION=2.40.0
 # renovate: datasource=github-tags depName=docker/compose
@@ -31,12 +31,12 @@ ARG HELM_VERSION=v3.10.1
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=v1.25.3
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.3.3
+ARG TERRAFORM_VERSION=v1.3.4
 # renovate: datasource=github-tags depName=tfutils/tfenv
 ARG TFENV_VERSION=v3.0.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
-ARG MINIKUBE_VERSION=v1.27.1
+ARG MINIKUBE_VERSION=v1.28.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=v0.34.0
 
