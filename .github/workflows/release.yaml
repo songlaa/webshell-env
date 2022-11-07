@@ -27,7 +27,6 @@ jobs:
           registry: quay.io
           username: ${{ secrets.QUAYIO_USERNAME }}
           password: ${{ secrets.QUAYIO_TOKEN }}
-
       - 
         name: Login to the ghcr.io Container registry
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -35,18 +34,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - 
         name: Get the version # strip away "ref/tags/webshell-"
         id: get_version
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3 | sed 's/webshell-//g')
-
       -
         name: Build Release Version
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ./Dockerfile
+          context: build
           push: true
           tags: |
             quay.io/acend/theia:${{ steps.get_version.outputs.VERSION }}
@@ -101,7 +97,7 @@ jobs:
           NAMESPACE: 'acend-webshell'
           PASSWORD: '${{ secrets.WEBSHELL_TEST_PASSWORD }}'
         run: |
-          helm upgrade $HELM_RELEASE webshell --install --wait --kubeconfig $HOME/.kube/config  --namespace=$NAMESPACE  --repo=https://acend.github.io/webshell-env/  --set password=$PASSWORD --values=helm-chart/values.yaml --atomic
+          helm upgrade $HELM_RELEASE webshell --install --wait --kubeconfig $HOME/.kube/config  --namespace=$NAMESPACE  --repo=https://acend.github.io/webshell-env/ --set password=$PASSWORD --values=deploy/charts/webshell/values-demo.yaml --atomic
       - 
         name: Redeploy Webshell
         env:

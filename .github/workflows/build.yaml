@@ -38,8 +38,7 @@ jobs:
         name: Build PR Version
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ./Dockerfile
+          context: build
           push: true
           tags: |
             quay.io/acend/theia:pr-${{ github.event.pull_request.number }}
@@ -61,4 +60,3 @@ jobs:
         with:
           name: trivy-results-pr
           path: trivy-results.txt
-

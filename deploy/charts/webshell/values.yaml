@@ -4,7 +4,6 @@
 
 replicaCount: 1
 
-
 student: "student1"
 password: "changeme"
 

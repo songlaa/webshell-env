@@ -1,15 +1,10 @@
-# Default values for webshell.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 1
-
+# Values file for webshell demo deployment
+# See values.yaml for defaults
 
 student: "test"
 
 dind:
   enabled: false
-
 
 rbac:
   create: false
@@ -26,8 +21,6 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/auth-type: "basic"
     nginx.ingress.kubernetes.io/auth-secret: "basic-auth"
-    
-
   hosts:
     - host: webshell-demo.training.acend.ch
       paths:
