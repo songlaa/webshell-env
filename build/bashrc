@@ -25,7 +25,7 @@ if [ ! -f "~/.kube/config" ]; then
   kubectl config set-cluster local --server="https://kubernetes.default" --certificate-authority "/run/secrets/kubernetes.io/serviceaccount/ca.crt"
   kubectl config set-credentials local --token="$(cat /run/secrets/kubernetes.io/serviceaccount/token)"
   kubectl config set-context local --cluster "local" --user "local"
-  kubectl config set-context local --namespace="$STUDENT"
+  kubectl config set-context local --namespace="$USER"
 fi
 
 clear && figlet -w 120 welcome @ acend

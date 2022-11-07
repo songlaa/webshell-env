@@ -45,8 +45,8 @@ spec:
           image: "{{ .Values.theia.image.repository }}:{{ .Values.theia.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          - name: STUDENT
-            value: "{{ .Values.student }}"
+          - name: USER
+            value: "{{ .Values.user }}"
           ports:
             - name: web
               containerPort: 3000

@@ -7,7 +7,7 @@ metadata:
   labels:
     acend.ch/purpose: webshell
     {{- include "webshell.labels" . | nindent 4 }}
-  name: acend-webshell-{{ .Values.student }}
+  name: acend-webshell-{{ .Values.user }}
 rules:
 - apiGroups:
   - ""

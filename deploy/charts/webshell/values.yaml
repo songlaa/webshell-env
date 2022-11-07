@@ -4,7 +4,7 @@
 
 replicaCount: 1
 
-student: "student1"
+user: "user1"
 password: "changeme"
 
 image:

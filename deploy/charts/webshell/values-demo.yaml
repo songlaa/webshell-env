@@ -1,7 +1,7 @@
 # Values file for webshell demo deployment
 # See values.yaml for defaults
 
-student: "test"
+user: "test"
 
 dind:
   enabled: false
