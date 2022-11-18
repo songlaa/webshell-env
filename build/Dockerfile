@@ -39,6 +39,8 @@ ARG KUSTOMIZE_VERSION=v4.5.7
 ARG MINIKUBE_VERSION=v1.28.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=v0.34.0
+# renovate: datasource=github-tags depName=tektoncd/cli
+ARG TEKTON_VERSION=v0.26.1
 
 ADD package.json /package.json
 RUN addgroup theia && \
@@ -106,6 +108,9 @@ RUN apk --no-cache update && \
     # Trivy
     curl -#L "https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION#v}_Linux-64bit.tar.gz" | tar -xvz trivy && \
     install -t /usr/local/bin trivy && rm trivy && \
+    # Tekton
+    curl -#L "https://github.com/tektoncd/cli/releases/download/${TEKTON_VERSION}/tkn_${TEKTON_VERSION#v}_Linux_x86_64.tar.gz" | tar -xvz tkn && \
+    install -t /usr/local/bin tkn && rm tkn && \
     # terraform
     git config --global advice.detachedHead false && \
     # tfenv & terraform
