@@ -12,5 +12,7 @@ spec:
   resources:
     requests:
       storage: "{{ .Values.dind.persistence.pvcsize }}"
+{{- if .Values.dind.persistence.storageclass }}
   storageClassName: {{ .Values.dind.persistence.storageclass }}
+{{- end }}
 {{- end }}
