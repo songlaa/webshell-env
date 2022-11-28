@@ -23,9 +23,9 @@ FROM node:19-alpine3.16
 # renovate: datasource=github-tags depName=argoproj/argo-cd
 ARG ARGOCD_VERSION=v2.5.2
 # renovate: datasource=github-tags depName=Azure/azure-cli
-ARG AZURECLI_VERSION=2.40.0
+ARG AZURECLI_VERSION=2.42.0
 # renovate: datasource=github-tags depName=docker/compose
-ARG DOCKER_COMPOSE=v2.10.2
+ARG DOCKER_COMPOSE=v2.13.0
 # renovate: datasource=github-tags depName=helm/helm
 ARG HELM_VERSION=v3.10.2
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
@@ -38,9 +38,9 @@ ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
 ARG MINIKUBE_VERSION=v1.28.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
-ARG TRIVY_VERSION=v0.34.0
+ARG TRIVY_VERSION=v0.35.0
 # renovate: datasource=github-tags depName=tektoncd/cli
-ARG TEKTON_VERSION=v0.27.0
+ARG TEKTON_VERSION=v0.28.0
 
 ADD package.json /package.json
 RUN addgroup theia && \
