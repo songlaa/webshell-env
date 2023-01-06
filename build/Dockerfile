@@ -31,16 +31,16 @@ ARG HELM_VERSION=v3.10.3
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=v1.26.0
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.3.6
+ARG TERRAFORM_VERSION=v1.3.7
 # renovate: datasource=github-tags depName=tfutils/tfenv
 ARG TFENV_VERSION=v3.0.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
 ARG MINIKUBE_VERSION=v1.28.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
-ARG TRIVY_VERSION=v0.35.0
+ARG TRIVY_VERSION=v0.36.1
 # renovate: datasource=github-tags depName=tektoncd/cli
-ARG TEKTON_VERSION=v0.28.0
+ARG TEKTON_VERSION=v0.29.0
 
 ADD package.json /package.json
 RUN addgroup theia && \
