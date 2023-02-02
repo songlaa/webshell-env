@@ -36,7 +36,7 @@ jobs:
 
       -
         name: Build PR Version
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: build
           push: true

@@ -21,7 +21,7 @@ RUN yarn --production --ignore-engines && \
 FROM node:19-alpine3.16
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARG ARGOCD_VERSION=v2.5.7
+ARG ARGOCD_VERSION=v2.5.10
 # renovate: datasource=github-tags depName=Azure/azure-cli
 ARG AZURECLI_VERSION=2.42.0
 # renovate: datasource=github-tags depName=docker/compose
@@ -36,11 +36,11 @@ ARG TERRAFORM_VERSION=v1.3.7
 ARG TFENV_VERSION=v3.0.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
-ARG MINIKUBE_VERSION=v1.28.0
+ARG MINIKUBE_VERSION=v1.29.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
-ARG TRIVY_VERSION=v0.36.1
+ARG TRIVY_VERSION=v0.37.1
 # renovate: datasource=github-tags depName=tektoncd/cli
-ARG TEKTON_VERSION=v0.29.0
+ARG TEKTON_VERSION=v0.29.1
 
 ADD package.json /package.json
 RUN addgroup theia && \
