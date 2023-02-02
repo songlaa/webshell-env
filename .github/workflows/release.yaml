@@ -40,7 +40,7 @@ jobs:
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3 | sed 's/webshell-//g')
       -
         name: Build Release Version
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: build
           push: true
