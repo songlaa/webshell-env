@@ -58,7 +58,7 @@ RUN apk --no-cache update && \
                        docker-cli mysql-client lynx bind-tools figlet jq libffi \
                        bash-completion docker-bash-completion git-bash-completion \
                        py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography \
-                       py3-wheel py3-cffi py3-openssl py3-psutil>=5.9 && \
+                       py3-wheel py3-cffi py3-openssl py3-psutil && \
     # azure
     pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
     # azure cli cleanup
@@ -130,4 +130,5 @@ ENV SHELL=/bin/bash \
 USER theia
 EXPOSE 3000
 COPY bashrc /home/theia/.bashrc
+COPY profile /home/theia/.profile
 ENTRYPOINT [ "node", "/home/theia/src-gen/backend/main.js", "/home/project", "--hostname=0.0.0.0" ]
