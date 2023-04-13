@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "webshell.fullname" . }}
   annotations:
-    {{- if .Values.openshift }}
+    {{- if .Values.openshiftOauthProxy.enabled }}
     service.beta.openshift.io/serving-cert-secret-name: webshell-proxy-tls
     {{- end }}
   labels:
@@ -12,7 +12,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      {{- if .Values.openshift }}
+      {{- if .Values.openshiftOauthProxy.enabled }}
       targetPort: 8888
       {{- else }}
       targetPort: 3000

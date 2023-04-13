@@ -110,9 +110,8 @@ spec:
           - -provider=openshift
           - -https-address=:8888
           - -http-address=
-          - -email-domain=*
           - -upstream=http://localhost:3000
-          - '-openshift-sar={"namespace":"{{ .Release.Namespace }}","resource":"services","name":"{{ include "webshell.fullname" . }}","verb":"get"}'
+          - '-openshift-sar={"namespace":"{{ .Release.Namespace }}","resource":"services","name":"{{ include "webshell.fullname" . }}","verb":"list"}'
           - -tls-cert=/etc/tls/private/tls.crt
           - -tls-key=/etc/tls/private/tls.key
           - -client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token
