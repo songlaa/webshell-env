@@ -4,7 +4,7 @@
 
 replicaCount: 1
 
-student: "student1"
+user: "user1"
 password: "changeme"
 
 openshift: true
@@ -16,7 +16,7 @@ theia:
   image:
     repository: quay.io/acend/theia
     # Overrides the image tag whose default is the chart appVersion.
-    tag: latest
+    tag: "0.2.22"
   resources:
     limits:
       cpu: 500m
@@ -24,9 +24,11 @@ theia:
     requests:
       cpu: 50m
       memory: 50Mi
-  securityContext: {}
+  securityContext:
+    privileged: true
+    runAsUser: 1001
   persistence:
-    enabled: false
+    enabled: true
     pvcsize: 1Gi
     storageclass: cloudscale-volume-ssd
 
@@ -43,7 +45,7 @@ dind:
   enabled: false
   image:
     repository: docker
-    tag: 20.10.12-dind
+    tag: 20.10.21-dind
   resources: {}
   persistence:
     enabled: false
@@ -51,9 +53,10 @@ dind:
     storageclass: cloudscale-volume-ssd
 
 openshiftOauthProxy:
+  enabled: true
   image:
     repository: registry.redhat.io/openshift4/ose-oauth-proxy
-    tag: v4.9
+    tag: v4.12
 
 imagePullSecrets: []
 nameOverride: ""
@@ -87,14 +90,14 @@ updateStrategy:
   type: RollingUpdate
 
 ingress:
-  enabled: true
+  enabled: false
   className: ""
   annotations:
     route.openshift.io/termination: reencrypt
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: webshell-test.ocp.aws.puzzle.ch
+    - host: chart-example.local
       paths:
         - path: /
           pathType: ImplementationSpecific

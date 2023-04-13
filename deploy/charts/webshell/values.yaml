@@ -51,9 +51,10 @@ dind:
     storageclass: cloudscale-volume-ssd
 
 openshiftOauthProxy:
+  enabled: false
   image:
     repository: registry.redhat.io/openshift4/ose-oauth-proxy
-    tag: v4.9
+    tag: v4.12
 
 imagePullSecrets: []
 nameOverride: ""
