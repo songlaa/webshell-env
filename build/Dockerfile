@@ -1,4 +1,4 @@
-FROM node:19-alpine3.16
+FROM node:20-alpine3.17
 
 RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev
 
@@ -18,7 +18,7 @@ RUN yarn --production --ignore-engines && \
     yarn autoclean --force && \
     yarn cache clean
 
-FROM node:19-alpine3.16
+FROM node:20-alpine3.17
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
 ARG ARGOCD_VERSION=v2.6.7
