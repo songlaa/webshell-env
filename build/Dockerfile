@@ -27,20 +27,20 @@ ARG AZURECLI_VERSION=2.42.0
 # renovate: datasource=github-tags depName=docker/compose
 ARG DOCKER_COMPOSE=v2.13.0
 # renovate: datasource=github-tags depName=helm/helm
-ARG HELM_VERSION=v3.11.2
+ARG HELM_VERSION=v3.11.3
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION=v1.26.3
+ARG KUBECTL_VERSION=v1.27.1
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.4.4
+ARG TERRAFORM_VERSION=v1.4.6
 # renovate: datasource=github-tags depName=tfutils/tfenv
 ARG TFENV_VERSION=v3.0.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
 ARG MINIKUBE_VERSION=v1.30.1
 # renovate: datasource=github-tags depName=aquasecurity/trivy
-ARG TRIVY_VERSION=v0.39.0
+ARG TRIVY_VERSION=v0.40.0
 # renovate: datasource=github-tags depName=tektoncd/cli
-ARG TEKTON_VERSION=v0.30.0
+ARG TEKTON_VERSION=v0.30.1
 
 ADD package.json /package.json
 RUN addgroup theia && \
