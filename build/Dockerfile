@@ -117,7 +117,8 @@ ENV SHELL=/bin/bash \
 
 USER theia
 
-RUN curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
+RUN cd /home/theia && \
+    curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
     tar zxvf krew-linux_amd64.tar.gz && \
     ./krew-linux_amd64 install krew && \
     export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" && \
@@ -127,7 +128,7 @@ RUN curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download
     kubectl krew install cert-manager && \
     kubectl krew install cilium && \
     kubectl krew install get-all && \
-    kubectl krew install modify-secret && \
+    kubectl krew install modify-secret
 EXPOSE 3000
 COPY bashrc /home/theia/.bashrc
 COPY profile /home/theia/.profile
