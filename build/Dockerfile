@@ -75,18 +75,6 @@ RUN apk --no-cache update && \
     # kubectl
     curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -t /usr/local/bin kubectl && rm kubectl && \
-    # krew 
-    curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
-    tar zxvf krew-linux_amd64.tar.gz && \
-    ./krew-linux_amd64 install krew && \
-    export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" && \
-    # krew plugins
-    kubectl krew install ctx && \
-    kubectl krew install ns && \
-    kubectl krew install cert-manager && \
-    kubectl krew install cilium && \
-    kubectl krew install get-all && \
-    kubectl krew install modify-secret && \
     # helm
     curl -#L "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" | tar -xvz --strip-components=1 linux-amd64/helm && \
     install -t /usr/local/bin helm && rm helm && \
@@ -128,6 +116,18 @@ ENV SHELL=/bin/bash \
     USE_LOCAL_GIT=true
 
 USER theia
+
+RUN curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
+    tar zxvf krew-linux_amd64.tar.gz && \
+    ./krew-linux_amd64 install krew && \
+    export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" && \
+    # krew plugins
+    kubectl krew install ctx && \
+    kubectl krew install ns && \
+    kubectl krew install cert-manager && \
+    kubectl krew install cilium && \
+    kubectl krew install get-all && \
+    kubectl krew install modify-secret && \
 EXPOSE 3000
 COPY bashrc /home/theia/.bashrc
 COPY profile /home/theia/.profile

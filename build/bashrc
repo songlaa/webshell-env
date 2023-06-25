@@ -16,6 +16,9 @@ for cmd in argocd helm kubectl oc tkn; do
   source <(${cmd} completion bash)
 done
 
+alias k=kubectl
+complete -F __start_kubectl k
+
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 /usr/bin/az.completion.sh
