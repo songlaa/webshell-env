@@ -1,29 +1,36 @@
-FROM node:20-alpine3.17
+# Builder stage
+FROM node:18-bookworm as build-stage
 
-RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev
+# install required tools to build the application
+RUN apt-get update && apt-get install -y libxkbfile-dev libsecret-1-dev
 
 WORKDIR /home/theia
-ADD package.json ./package.json
+# Copy repository files
+COPY theia/. .
 
-ARG GITHUB_TOKEN
-RUN yarn --pure-lockfile --ignore-engines && \
-    NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
-    yarn theia download:plugins
-
-RUN yarn --production --ignore-engines && \
+# Remove unnecesarry files for the browser application
+# Download plugins and build application production mode
+# Use yarn autoclean to remove unnecessary files from package dependencies
+RUN yarn --pure-lockfile && \
+    yarn build:extensions && \
+    yarn download:plugins && \
+    yarn browser build && \
+    yarn --production && \
     yarn autoclean --init && \
     echo *.ts >> .yarnclean && \
     echo *.ts.map >> .yarnclean && \
     echo *.spec.* >> .yarnclean && \
     yarn autoclean --force && \
-    yarn cache clean
+    yarn cache clean && \
+    rm -rf .git applications/electron theia-extensions/theia-blueprint-launcher theia-extensions/theia-blueprint-updater node_modules
 
-FROM node:20-alpine3.17
+# Production stage uses a small base image
+FROM node:18-bookworm-slim as production-stage
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
 ARG ARGOCD_VERSION=v2.7.6
 # renovate: datasource=github-tags depName=Azure/azure-cli
-ARG AZURECLI_VERSION=2.42.0
+ARG AZURECLI_VERSION=2.51.0
 # renovate: datasource=github-tags depName=docker/compose
 ARG DOCKER_COMPOSE=v2.13.0
 # renovate: datasource=github-tags depName=helm/helm
@@ -31,9 +38,9 @@ ARG HELM_VERSION=v3.12.1
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=v1.27.3
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.5.1
-# renovate: datasource=github-tags depName=tfutils/tfenv
-ARG TFENV_VERSION=v3.0.0
+ARG TERRAFORM_VERSION=v1.5.5
+# renovate: datasource=github-releases depName=terraform-linters/tflint
+ARG TFLINT_VERSION=v0.47.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
 ARG MINIKUBE_VERSION=v1.30.1
@@ -42,36 +49,23 @@ ARG TRIVY_VERSION=v0.42.1
 # renovate: datasource=github-tags depName=tektoncd/cli
 ARG TEKTON_VERSION=v0.31.1
 
-ADD package.json /package.json
-RUN addgroup theia && \
-    adduser -G theia -s /bin/sh -D theia && \
-    chmod g+rw /home && \
+# Create theia user and directories
+# Application will be copied to /home/theia
+# Default workspace is located at /home/project
+RUN adduser --system --group --home /home/theia theia
+RUN chmod g+rw /home && \
     mkdir -p /home/project && \
     chown -R theia:theia /home/theia && \
     chown -R theia:theia /home/project
 
-RUN apk --no-cache update && \
-    apk --no-cache -U upgrade -a && \
-    apk add --no-cache git openssh-client-default bash libsecret chromium \
-                       zsh zsh-autosuggestions podman buildah nano \
-                       coreutils grep curl gettext vim tree git p7zip gcompat \
-                       docker-cli mysql-client lynx bind-tools figlet jq libffi \
-                       bash-completion docker-bash-completion git-bash-completion \
-                       py3-pip py3-yaml py3-pynacl py3-bcrypt py3-cryptography \
-                       py3-wheel py3-cffi py3-openssl py3-psutil && \
-    # azure
-    pip3 install azure-cli==${AZURECLI_VERSION} --no-cache-dir && \
-    # azure cli cleanup
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/containerservice/v201*" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/compute/v201*" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/network/v201*" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/network/v2020*" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/cosmosdb" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/iothub" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/sql" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/web" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/databoxedge" && \
-    bash -c "rm -rf /usr/lib/python3.10/site-packages/azure/mgmt/synapse" && \
+RUN apt-get update && \
+    apt-get install -y git openssh-client bash nano libsecret-1-0 \
+                       grep vim tree p7zip figlet curl bash-completion unzip && \
+    apt-get autoremove -y && \
+    apt-get autoclean -y && \
+    apt-get clean
+
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     # kubectl
     curl -#L -o kubectl "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -t /usr/local/bin kubectl && rm kubectl && \
@@ -99,23 +93,32 @@ RUN apk --no-cache update && \
     # Tekton
     curl -#L "https://github.com/tektoncd/cli/releases/download/${TEKTON_VERSION}/tkn_${TEKTON_VERSION#v}_Linux_x86_64.tar.gz" | tar -xvz tkn && \
     install -t /usr/local/bin tkn && rm tkn && \
+    # TFLint
+    curl -#L -o tflint.zip "https://github.com/terraform-linters/tflint/releases/download/${TFLINT_VERSION}/tflint_linux_amd64.zip" && \
+    unzip tflint.zip && rm tflint.zip && \
+    install -t /usr/local/bin tflint && rm tflint && \
     # terraform
-    git config --global advice.detachedHead false && \
-    # tfenv & terraform
-    cd /opt/ && git clone --depth 1 --branch ${TFENV_VERSION} https://github.com/tfutils/tfenv.git 2>/dev/null && \
-    ln -s /opt/tfenv/bin/* /usr/local/bin && \
-    export TFENV_TERRAFORM_VERSION=$(echo $TERRAFORM_VERSION | sed -e "s/v//") && \
-    tfenv install && \
-    tfenv use && \
-    sed -i 's/#mount_program/mount_program/' /etc/containers/storage.conf
+    curl -#L -o terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION#v}/terraform_${TERRAFORM_VERSION#v}_linux_amd64.zip" && \
+    unzip terraform.zip && rm terraform.zip && \
+    install -t /usr/local/bin terraform && rm terraform
 
-COPY --from=0 --chown=theia:theia /home/theia /home/theia
+ENV HOME /home/theia
+WORKDIR /home/theia
 
+# Copy application from builder-stage
+COPY --from=build-stage --chown=theia:theia /home/theia /home/theia
+
+EXPOSE 3000
+
+# Specify default shell for Theia and the Built-In plugins directory
 ENV SHELL=/bin/bash \
     THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins \
     USE_LOCAL_GIT=true
 
+# Swtich to Theia user
 USER theia
+COPY bashrc /home/theia/.bashrc
+COPY profile /home/theia/.profile
 
 RUN cd /home/theia && \
     curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
@@ -129,7 +132,11 @@ RUN cd /home/theia && \
     kubectl krew install cilium && \
     kubectl krew install get-all && \
     kubectl krew install modify-secret
-EXPOSE 3000
-COPY bashrc /home/theia/.bashrc
-COPY profile /home/theia/.profile
-ENTRYPOINT [ "node", "/home/theia/src-gen/backend/main.js", "/home/project", "--hostname=0.0.0.0" ]
+
+WORKDIR /home/theia/applications/browser
+
+# Launch the backend application via node
+ENTRYPOINT [ "node", "/home/theia/applications/browser/lib/backend/main.js" ]
+
+# Arguments passed to the application
+CMD [ "/home/project", "--hostname=0.0.0.0" ]
