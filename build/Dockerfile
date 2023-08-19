@@ -59,7 +59,7 @@ RUN chmod g+rw /home && \
     chown -R theia:theia /home/project
 
 RUN apt-get update && \
-    apt-get install -y git openssh-client bash nano libsecret-1-0 \
+    apt-get install -y git openssh-client bash nano libsecret-1-0 dnsutils \
                        grep vim tree p7zip figlet curl bash-completion unzip && \
     apt-get autoremove -y && \
     apt-get autoclean -y && \
