@@ -60,7 +60,16 @@ RUN chmod g+rw /home && \
 
 RUN apt-get update && \
     apt-get install -y git openssh-client bash nano libsecret-1-0 dnsutils \
-                       grep vim tree p7zip figlet curl bash-completion unzip && \
+                       grep vim tree p7zip figlet curl bash-completion unzip ca-certificates gnupg && \
+    install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    chmod a+r /etc/apt/keyrings/docker.gpg && \
+    echo \
+    "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
     apt-get autoremove -y && \
     apt-get autoclean -y && \
     apt-get clean
@@ -126,12 +135,7 @@ RUN cd /home/theia && \
     ./krew-linux_amd64 install krew && \
     export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" && \
     # krew plugins
-    kubectl krew install ctx && \
-    kubectl krew install ns && \
-    kubectl krew install cert-manager && \
-    kubectl krew install cilium && \
-    kubectl krew install get-all && \
-    kubectl krew install modify-secret
+    for PLUGIN in ctx ns cert-manager cilium get-all modify-secret tree view-secret neat; do kubectl krew install $PLUGIN; done
 
 WORKDIR /home/theia/applications/browser
 
