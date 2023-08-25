@@ -56,7 +56,9 @@
     "vscode-builtin-extensions-pack": "https://open-vsx.org/api/eclipse-theia/builtin-extension-pack/1.77.0/file/eclipse-theia.builtin-extension-pack-1.77.0.vsix",
     "vscjava.vscode-java-pack": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.11/file/vscjava.vscode-java-pack-0.25.11.vsix",
     "vscjava.vscode-java-dependency": "https://open-vsx.org/api/vscjava/vscode-java-dependency/0.21.2/file/vscjava.vscode-java-dependency-0.21.2.vsix",
-    "terraform": "https://open-vsx.org/api/4ops/terraform/0.2.1/file/4ops.terraform-0.2.1.vsix"
+    "terraform": "https://open-vsx.org/api/4ops/terraform/0.2.1/file/4ops.terraform-0.2.1.vsix",
+    "vscode-kubernetes-tools": "https://open-vsx.org/api/ms-kubernetes-tools/vscode-kubernetes-tools/1.3.13/file/ms-kubernetes-tools.vscode-kubernetes-tools-1.3.13.vsix",
+    "yaml": "https://open-vsx.org/api/redhat/vscode-yaml/1.14.0/file/redhat.vscode-yaml-1.14.0.vsix"
   },
   "theiaPluginsExcludeIds": [
     "ms-vscode.js-debug-companion",
@@ -66,7 +68,25 @@
     "vscode.github",
     "vscode.github-authentication",
     "vscode.ipynb",
-    "vscode.microsoft-authentication"
+    "vscode.microsoft-authentication",
+    "vscode.make",
+    "vscode.sql",
+    "vscode.swift",
+    "vscode.coffeescript",
+    "vscode.cpp",
+    "vscode.csharp",
+    "vscode.dart",
+    "vscode.fsharp",
+    "vscode.groovy",
+    "vscode.hlsl",
+    "vscode.jake",
+    "vscode.julia",
+    "vscode.objective-c",
+    "vscode.perl",
+    "vscode.pug",
+    "vscode.r",
+    "vscode.ruby",
+    "vscode.vb"
   ],
   "workspaces": [
     "applications/*",

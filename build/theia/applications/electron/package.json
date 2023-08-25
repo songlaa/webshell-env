@@ -23,7 +23,7 @@
     "target": "electron",
     "frontend": {
       "config": {
-        "applicationName": "Theia Blueprint",
+        "applicationName": "Awesome acend Webshell",
         "preferences": {
           "toolbar.showToolbar": true,
           "security.workspace.trust.enabled": false

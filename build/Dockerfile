@@ -43,7 +43,7 @@ ARG TERRAFORM_VERSION=v1.5.5
 ARG TFLINT_VERSION=v0.47.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
-ARG MINIKUBE_VERSION=v1.31.1
+ARG MINIKUBE_VERSION=v1.31.2
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=v0.44.1
 # renovate: datasource=github-tags depName=tektoncd/cli
@@ -133,6 +133,7 @@ RUN cd /home/theia && \
     curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
     tar zxvf krew-linux_amd64.tar.gz && \
     ./krew-linux_amd64 install krew && \
+    rm -f krew-linux_amd64* && \
     export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" && \
     # krew plugins
     for PLUGIN in ctx ns cert-manager cilium get-all modify-secret tree view-secret neat; do kubectl krew install $PLUGIN; done

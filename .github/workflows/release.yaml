@@ -37,7 +37,7 @@ jobs:
       - 
         name: Get the version # strip away "ref/tags/webshell-"
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3 | sed 's/webshell-//g')
+        run: echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 3 | sed 's/webshell-//g')" >> $GITHUB_OUTPUT
       -
         name: Build Release Version
         uses: docker/build-push-action@v4

@@ -4,6 +4,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding 
 metadata:
   name: admin-rb
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
     {{- include "webshell.labels" . | nindent 4 }}
 roleRef:
