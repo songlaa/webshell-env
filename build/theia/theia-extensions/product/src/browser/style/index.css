@@ -15,7 +15,7 @@
  ********************************************************************************/
 
 :root {
-    --theia-branding-logo: url(../icons/TheiaBlueprintLogo-blue.png);
+    --theia-branding-logo: url(../icons/acend/AC-logo-rgb-black.png);
 }
 
 .gs-blue-header {
@@ -42,7 +42,7 @@
     background-repeat: no-repeat;
     background-size: contain;
     width: 250px;
-    height: 118px;
+    height: 62;
     padding: 20px;
 }
 
@@ -58,7 +58,7 @@
     background-repeat: no-repeat;
     background-size: contain;
     width: 250px;
-    height: 118px;
+    height: 62;
     padding: 20px;
 }
 

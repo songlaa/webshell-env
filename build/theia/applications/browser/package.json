@@ -21,12 +21,13 @@
   "theia": {
     "frontend": {
       "config": {
-        "applicationName": "Theia Blueprint",
+        "applicationName": "Awesome acend Webshell",
         "warnOnPotentiallyInsecureHostPattern": false,
         "preferences": {
           "toolbar.showToolbar": true,
           "files.enableTrash": false,
-          "security.workspace.trust.enabled": false
+          "security.workspace.trust.enabled": false,
+          "workbench.colorTheme": "dark"
         }
       }
     },
@@ -34,7 +35,9 @@
       "config": {
         "warnOnPotentiallyInsecureHostPattern": false,
         "startupTimeout": -1,
-        "resolveSystemPlugins": false
+        "resolveSystemPlugins": false,
+        "redhat.telemetry.enabled": false,
+        "workbench.colorTheme": "dark"
       }
     },
     "generator": {

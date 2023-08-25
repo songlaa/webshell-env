@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { inject, injectable } from '@theia/core/shared/inversify';
-import { renderDocumentation, renderDownloads, renderSourceCode, renderSupport, renderTickets, renderWhatIs, renderWhatIsNot } from './branding-util';
+import { renderAboutYourTraining  } from './branding-util';
 import { GettingStartedWidget } from '@theia/getting-started/lib/browser/getting-started-widget';
 import { VSXEnvironment } from '@theia/vsx-registry/lib/common/vsx-environment';
 import { WindowService } from '@theia/core/lib/browser/window/window-service';
@@ -62,40 +62,10 @@ export class TheiaBlueprintGettingStartedWidget extends GettingStartedWidget {
             {this.renderHeader()}
             <hr className='gs-hr' />
             <div className='flex-grid'>
-                <div className='col'>
-                    {renderWhatIs(this.windowService)}
-                </div>
-            </div>
-            <div className='flex-grid'>
-                <div className='col'>
-                    {renderWhatIsNot()}
-                </div>
-            </div>
-            <div className='flex-grid'>
-                <div className='col'>
-                    {renderSupport(this.windowService)}
-                </div>
-            </div>
-            <div className='flex-grid'>
-                <div className='col'>
-                    {renderTickets(this.windowService)}
-                </div>
-            </div>
-            <div className='flex-grid'>
-                <div className='col'>
-                    {renderSourceCode(this.windowService)}
-                </div>
-            </div>
-            <div className='flex-grid'>
-                <div className='col'>
-                    {renderDocumentation(this.windowService)}
-                </div>
-            </div>
-            <div className='flex-grid'>
-                <div className='col'>
-                    {renderDownloads()}
-                </div>
-            </div>
+               <div className='col'>
+                    {renderAboutYourTraining(this.windowService)}
+               </div>
+            </div> 
             <div className='flex-grid'>
                 <div className='col'>
                     {this.renderPreferences()}
@@ -121,32 +91,17 @@ export class TheiaBlueprintGettingStartedWidget extends GettingStartedWidget {
                     {this.renderSettings()}
                 </div>
             </div>
-            <div className='flex-grid'>
-                <div className='col'>
-                    {this.renderHelp()}
-                </div>
-            </div>
+
         </div>;
     }
 
     protected renderHeader(): React.ReactNode {
         return <div className='gs-header'>
-            <h1>Eclipse Theia <span className='gs-blue-header'>Blueprint</span></h1>
-            {this.renderVersion()}
+            <h1>Welcome to your acend Training</h1>
         </div>;
     }
 
-    protected renderVersion(): React.ReactNode {
-        return <div>
-            <p className='gs-sub-header' >
-                {this.applicationInfo ? 'Version ' + this.applicationInfo.version + ' (Beta)' : '(Beta)'}
-            </p>
 
-            <p className='gs-sub-header' >
-                {'VS Code API Version: ' + this.vscodeApiVersion}
-            </p>
-        </div>;
-    }
 
     protected renderPreferences(): React.ReactNode {
         return <GSPreferences preferenceService={this.preferenceService}></GSPreferences>;
