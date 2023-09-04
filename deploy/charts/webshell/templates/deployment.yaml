@@ -47,7 +47,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           - name: USER
-            value: "{{ .Values.user }}"
+            value: {{ .Values.user }}
+          - name: THEIA_WEBVIEW_EXTERNAL_ENDPOINT
+            value: {{ .Values.theia.webview_url }}
           ports:
             - name: web
               containerPort: 3000
