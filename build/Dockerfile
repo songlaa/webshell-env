@@ -60,7 +60,7 @@ RUN chmod g+rw /home && \
 
 RUN apt-get update && \
     apt-get install -y git openssh-client bash nano libsecret-1-0 dnsutils \
-                       grep vim tree p7zip figlet curl bash-completion unzip ca-certificates gnupg jq && \
+                       grep vim tree p7zip figlet curl bash-completion unzip ca-certificates gnupg jq mariadb-client && \
     install -m 0755 -d /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
     chmod a+r /etc/apt/keyrings/docker.gpg && \
