@@ -10,6 +10,7 @@
   ],
   "regexManagers": [
     {
+      "customType": "regex",
       "description": "Update ARG versions of services in Dockerfiles",
       "fileMatch": [
         "(^|/|\\.)Dockerfile$",
