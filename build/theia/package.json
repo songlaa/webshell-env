@@ -16,12 +16,12 @@
     "node": ">=12.14.1"
   },
   "devDependencies": {
-    "@theia/cli": "1.40.0",
+    "@theia/cli": "1.41.0",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/eslint-plugin-tslint": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "eslint": "^7.27.0",
-    "eslint-plugin-deprecation": "1.2.1",
+    "eslint-plugin-deprecation": "1.5.0",
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-no-unsanitized": "^3.1.5",
@@ -29,8 +29,8 @@
     "lerna": "^6.0.1",
     "rimraf": "^2.7.1",
     "ts-node": "^10.0.0",
-    "type-fest": "^0.20.2",
-    "yargs": "17.2.1"
+    "type-fest": "^0.21.0",
+    "yargs": "17.7.2"
   },
   "scripts": {
     "clean": "lerna run clean && rimraf node_modules",
@@ -53,38 +53,27 @@
   },
   "theiaPluginsDir": "plugins",
   "theiaPlugins": {
-    "vscode-builtin-extensions-pack": "https://open-vsx.org/api/eclipse-theia/builtin-extension-pack/1.77.0/file/eclipse-theia.builtin-extension-pack-1.77.0.vsix",
-    "vscjava.vscode-java-pack": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.11/file/vscjava.vscode-java-pack-0.25.11.vsix",
-    "vscjava.vscode-java-dependency": "https://open-vsx.org/api/vscjava/vscode-java-dependency/0.21.2/file/vscjava.vscode-java-dependency-0.21.2.vsix",
-    "terraform": "https://open-vsx.org/api/4ops/terraform/0.2.1/file/4ops.terraform-0.2.1.vsix"
+    "json": "https://open-vsx.org/api/vscode/json/1.62.3/file/vscode.json-1.62.3.vsix",
+    "yaml": "https://open-vsx.org/api/vscode/yaml/1.62.3/file/vscode.yaml-1.62.3.vsix",
+    "shell": "https://open-vsx.org/api/vscode/shellscript/1.62.3/file/vscode.shellscript-1.62.3.vsix",
+    "golang": "https://open-vsx.org/api/vscode/go/1.62.3/file/vscode.go-1.62.3.vsix",
+    "python": "https://open-vsx.org/api/vscode/python/1.62.3/file/vscode.python-1.62.3.vsix",
+    "docker": "https://open-vsx.org/api/vscode/docker/1.62.3/file/vscode.docker-1.62.3.vsix",
+    "dockerfile": "https://open-vsx.org/api/jeff-hykin/better-dockerfile-syntax/1.0.2/file/jeff-hykin.better-dockerfile-syntax-1.0.2.vsix",
+    "markdown": "https://open-vsx.org/api/vscode/markdown/1.62.3/file/vscode.markdown-1.62.3.vsix",
+    "terraform": "https://open-vsx.org/api/4ops/terraform/0.2.1/file/4ops.terraform-0.2.1.vsix",
+    "yaml.lint": "https://open-vsx.org/api/phil9909/ytt-lint/0.3.1/file/phil9909.ytt-lint-0.3.1.vsix"
   },
   "theiaPluginsExcludeIds": [
     "ms-vscode.js-debug-companion",
     "VisualStudioExptTeam.vscodeintellicode",
-    "vscode.builtin-notebook-renderers",
     "vscode.extension-editing",
+    "vscode.builtin-notebook-renderers",
+    "vscode.git",
+    "vscode.git-ui",
     "vscode.github",
     "vscode.github-authentication",
-    "vscode.ipynb",
-    "vscode.microsoft-authentication",
-    "vscode.make",
-    "vscode.sql",
-    "vscode.swift",
-    "vscode.coffeescript",
-    "vscode.cpp",
-    "vscode.csharp",
-    "vscode.dart",
-    "vscode.fsharp",
-    "vscode.groovy",
-    "vscode.hlsl",
-    "vscode.jake",
-    "vscode.julia",
-    "vscode.objective-c",
-    "vscode.perl",
-    "vscode.pug",
-    "vscode.r",
-    "vscode.ruby",
-    "vscode.vb"
+    "vscode.microsoft-authentication"
   ],
   "workspaces": [
     "applications/*",
@@ -92,8 +81,8 @@
   ],
   "resolutions": {
     "@types/puppeteer": "^5.4.0",
-    "@yarnpkg/parsers": "3.0.0-rc.44",
-    "**/msgpackr": "1.8.3",
+    "@yarnpkg/parsers": "3.0.0-rc.50",
+    "**/msgpackr": "1.9.8",
     "**/multer": "1.4.4-lts.1"
   }
 }
