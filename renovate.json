@@ -1,7 +1,12 @@
 {
   "extends": [
-    "config:base",
-    "group:all"
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["docker-compose", "npm", "nvm","github-actions","docker-file","regex"],
+      "groupName": "{{manager}}"
+    }
   ],
   "regexManagers": [
     {
