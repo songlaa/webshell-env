@@ -4,7 +4,7 @@
   ],
   "packageRules": [
     {
-      "matchManagers": ["npm", "nvm","github-actions","dockerfile","regex","terraform"],
+      "matchManagers": ["npm","github-actions","dockerfile","regex","helm-values"],
       "groupName": "{{manager}}"
     }
   ],
