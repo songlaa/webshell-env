@@ -82,7 +82,7 @@
   "resolutions": {
     "@types/puppeteer": "^5.4.0",
     "@yarnpkg/parsers": "3.0.0-rc.50",
-    "**/msgpackr": "1.9.8",
+    "**/msgpackr": "1.9.9",
     "**/multer": "1.4.4-lts.1"
   }
 }
