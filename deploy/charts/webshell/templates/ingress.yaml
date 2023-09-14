@@ -15,7 +15,6 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: {{ $fullName }}
   namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:

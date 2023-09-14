@@ -2,7 +2,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: {{ include "webshell.fullname" . }}
   namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:

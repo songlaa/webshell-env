@@ -54,7 +54,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "webshell.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
+{{- if .Values.serviceAccount.create }}
 {{- default (include "webshell.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
