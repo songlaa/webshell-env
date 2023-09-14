@@ -28,7 +28,7 @@ jobs:
 
       - 
         name: Login to the ghcr.io Container registry
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        uses: docker/login-action@b4bedf8053341df3b5a9f9e0f2cf4e79e27360c6
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -36,27 +36,10 @@ jobs:
 
       -
         name: Build PR Version
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: build
           push: true
           tags: |
             quay.io/acend/theia:pr-${{ github.event.pull_request.number }}
             ghcr.io/acend/theia:pr-${{ github.event.pull_request.number }}
-      -
-        name: Run vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'quay.io/acend/theia:pr-${{ github.event.pull_request.number }}'
-          format: 'table'
-          output: 'trivy-results.txt'
-          exit-code: '0'
-          ignore-unfixed: true
-          vuln-type: 'os'
-          severity: 'CRITICAL,HIGH'
-      -
-        name: Archive vulnerability scan results
-        uses: actions/upload-artifact@v3
-        with:
-          name: trivy-results-pr
-          path: trivy-results.txt

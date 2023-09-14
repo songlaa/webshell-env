@@ -5,6 +5,7 @@ kind: PersistentVolumeClaim
 metadata:
   namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: {{ include "webshell.fullname" . }}-docker
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
     {{- include "webshell.labels" . | nindent 4 }}
 spec:
@@ -13,4 +14,7 @@ spec:
   resources:
     requests:
       storage: "{{ .Values.dind.persistence.pvcsize }}"
+{{- if .Values.dind.persistence.storageclass }}
+  storageClassName: {{ .Values.dind.persistence.storageclass }}
+{{- end }}
 {{- end }}

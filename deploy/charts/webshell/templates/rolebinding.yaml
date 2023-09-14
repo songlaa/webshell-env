@@ -5,6 +5,7 @@ kind: RoleBinding
 metadata:
   namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: admin-rb
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
     {{- include "webshell.labels" . | nindent 4 }}
 roleRef:

@@ -13,6 +13,7 @@ image:
   pullPolicy: IfNotPresent
 
 theia:
+  webview_url: "{{uuid}}.webview.{{hostname}}"
   image:
     repository: quay.io/acend/theia
     # Overrides the image tag whose default is the chart appVersion.
@@ -43,7 +44,7 @@ dind:
   enabled: true
   image:
     repository: docker
-    tag: 20.10.21-dind
+    tag: 24.0.6-dind
   resources: {}
   persistence:
     enabled: false

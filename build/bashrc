@@ -12,9 +12,12 @@ export DOCKER_HOST=tcp://localhost:2376
 export DOCKER_TLS_VERIFY=1
 export DOCKER_CERT_PATH=/home/project/.tls/client
 
-for cmd in argocd helm kubectl oc; do
+for cmd in argocd helm kubectl oc tkn; do
   source <(${cmd} completion bash)
 done
+
+alias k=kubectl
+complete -F __start_kubectl k
 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 

@@ -1,10 +1,11 @@
 
 {{- if .Values.reset.enabled -}}
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: reset-webshell
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
 spec:
   jobTemplate:
     metadata:

@@ -1,10 +1,16 @@
 {
   "extends": [
-    "config:base",
-    "group:all"
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["npm","github-actions","dockerfile","regex","helm-values"],
+      "groupName": "{{manager}}"
+    }
   ],
   "regexManagers": [
     {
+      "customType": "regex",
       "description": "Update ARG versions of services in Dockerfiles",
       "fileMatch": [
         "(^|/|\\.)Dockerfile$",

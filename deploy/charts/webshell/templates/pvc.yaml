@@ -5,6 +5,7 @@ kind: PersistentVolumeClaim
 metadata:
   namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: {{ include "webshell.fullname" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
     {{- include "webshell.labels" . | nindent 4 }}
 spec:
@@ -13,4 +14,7 @@ spec:
   resources:
     requests:
       storage: "{{ .Values.theia.persistence.pvcsize }}"
+{{- if .Values.theia.persistence.storageclass }}
+  storageClassName: {{ .Values.theia.persistence.storageclass }}
+{{- end }}
 {{- end }}

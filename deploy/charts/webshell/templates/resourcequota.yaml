@@ -4,8 +4,9 @@ kind: ResourceQuota
 metadata:
   namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: user
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
     {{- include "webshell.labels" . | nindent 4 }}
 spec:
   hard:
-    pods: "20"
+    pods: "30"

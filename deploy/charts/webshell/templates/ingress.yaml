@@ -17,6 +17,7 @@ kind: Ingress
 metadata:
   namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: {{ $fullName }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
     {{- include "webshell.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
