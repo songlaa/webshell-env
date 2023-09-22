@@ -7,16 +7,18 @@ replicaCount: 1
 user: "user1"
 password: "changeme"
 
+# Set to true when deploying on OpenShift
 openshift: true
 
 image:
   pullPolicy: IfNotPresent
 
 theia:
+  webview_url: "{{uuid}}.webview.{{hostname}}"
   image:
     repository: quay.io/acend/theia
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "0.2.22"
+    tag: ""
   resources:
     limits:
       cpu: 500m
@@ -25,11 +27,13 @@ theia:
       cpu: 50m
       memory: 50Mi
   securityContext:
+    # Uncomment for OpenShift
     privileged: true
     runAsUser: 1001
   persistence:
     enabled: true
     pvcsize: 1Gi
+    # Define StorageClass
     storageclass: cloudscale-volume-ssd
 
 init:
@@ -42,10 +46,10 @@ init:
   - echo Welcome to the acend theia ide > /home/project/welcome
 
 dind:
-  enabled: false
+  enabled: true
   image:
     repository: docker
-    tag: 20.10.21-dind
+    tag: 24.0.6-dind
   resources: {}
   persistence:
     enabled: false
@@ -53,10 +57,11 @@ dind:
     storageclass: cloudscale-volume-ssd
 
 openshiftOauthProxy:
+  # Set to true when deploying on OpenShift
   enabled: true
   image:
     repository: registry.redhat.io/openshift4/ose-oauth-proxy
-    tag: v4.12
+    tag: v4.13
 
 imagePullSecrets: []
 nameOverride: ""
@@ -73,6 +78,7 @@ serviceAccount:
 
 podAnnotations: {}
 
+# Set empty when deploying on OpenShift
 podSecurityContext: {}
 
 rbac:
@@ -84,7 +90,7 @@ reset:
 
 service:
   type: ClusterIP
-  port: 8888
+  port: 3000
 
 updateStrategy:
   type: RollingUpdate
@@ -102,9 +108,9 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
-  #- secretName: webshell-tls
-  #  hosts:
-  #    - webshell-test.ocp-staging.cloudscale.puzzle.ch
+  # - secretName: webshell-tls
+  #   hosts:
+  #     - webshell-test.ocp-staging.cloudscale.puzzle.ch
 
 nodeSelector: {}
 

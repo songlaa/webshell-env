@@ -7,6 +7,7 @@ replicaCount: 1
 user: "user1"
 password: "changeme"
 
+# Set to true when deploying on OpenShift
 openshift: false
 
 image:
@@ -26,9 +27,13 @@ theia:
       cpu: 50m
       memory: 50Mi
   securityContext: {}
+    # Uncomment for OpenShift
+    #privileged: true
+    #runAsUser: 1001
   persistence:
-    enabled: false
+    enabled: true
     pvcsize: 1Gi
+    # Define StorageClass
     storageclass: cloudscale-volume-ssd
 
 init:
@@ -52,10 +57,11 @@ dind:
     storageclass: cloudscale-volume-ssd
 
 openshiftOauthProxy:
+  # Set to true when deploying on OpenShift
   enabled: false
   image:
     repository: registry.redhat.io/openshift4/ose-oauth-proxy
-    tag: v4.12
+    tag: v4.13
 
 imagePullSecrets: []
 nameOverride: ""
@@ -72,6 +78,8 @@ serviceAccount:
 
 podAnnotations: {}
 
+# Set empty podSecurityContext when deploying on OpenShift
+#podSecurityContext: {}
 podSecurityContext:
   fsGroup: 1001
 
@@ -102,9 +110,9 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  # - secretName: chart-example-tls
+  #   hosts:
+  #     - chart-example.local
 
 nodeSelector: {}
 
