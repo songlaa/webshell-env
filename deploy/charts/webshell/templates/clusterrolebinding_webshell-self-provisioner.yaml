@@ -9,6 +9,6 @@ roleRef:
   name: self-provisioner
 subjects:
 - kind: ServiceAccount
-  name: webshell
+  name: {{ include "webshell.serviceAccountName" . }}
   namespace: {{ .Values.namespace | default .Release.Namespace }}
 {{- end -}}

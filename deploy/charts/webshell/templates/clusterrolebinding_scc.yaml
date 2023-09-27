@@ -9,6 +9,6 @@ roleRef:
   name: system:openshift:scc:privileged
 subjects:
 - kind: ServiceAccount
-  name: webshell
+  name: {{ include "webshell.serviceAccountName" . }}
   namespace: {{ .Values.namespace | default .Release.Namespace }}
 {{- end -}}
