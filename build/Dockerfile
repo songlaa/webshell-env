@@ -13,6 +13,7 @@ RUN cp -r /tmp/theia-blueprint/* . && \
     mv package.json package.json.orig
 COPY package.json.acend .
 COPY preload.html ./applications/browser/resources/preload.html
+COPY branding-util.tsx ./theia-extensions/product/src/browser/branding-util.tsx
 
 # customize package.json
 RUN jq -s '.[0] * .[1]' package.json.acend package.json.orig > package.json.tmp1 && \
