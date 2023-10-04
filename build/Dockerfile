@@ -51,7 +51,7 @@ ARG HELM_VERSION=v3.13.0
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=v1.28.2
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.5.7
+ARG TERRAFORM_VERSION=v1.6.0
 # renovate: datasource=github-releases depName=terraform-linters/tflint
 ARG TFLINT_VERSION=v0.48.0
 ARG KUSTOMIZE_VERSION=v4.5.7
