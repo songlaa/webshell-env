@@ -60,9 +60,9 @@ spec:
           - name: shared-data
             mountPath: /home/project
         {{- if .Values.dind.enabled }}
-        - image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
+        - name: dind
+          image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          name: dind
           env:
           - name: DOCKER_TLS_CERTDIR
             value: /home/project/.tls
@@ -95,7 +95,33 @@ spec:
             mountPath: /home/project
           - name: docker-volume
             mountPath: /var/lib/docker
-          {{- end }}
+        {{- end }}
+        {{- if .Values.openshift }}
+        - name: oauth-proxy
+          image: "{{ .Values.openshiftOauthProxy.image.repository }}:{{ .Values.openshiftOauthProxy.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 8888
+            protocol: TCP
+            name: oauth-proxy
+          volumeMounts:
+          - mountPath: /etc/tls/private
+            name: secret-webshell-proxy-tls
+          - mountPath: /etc/proxy/secrets
+            name: secret-webshell-proxy
+          args:
+          - -provider=openshift
+          - -https-address=:8888
+          - -http-address=
+          - -upstream=http://localhost:3000
+          - '-openshift-sar={"namespace":"{{ .Release.Namespace }}","resource":"services","name":"{{ include "webshell.fullname" . }}","verb":"list"}'
+          - -tls-cert=/etc/tls/private/tls.crt
+          - -tls-key=/etc/tls/private/tls.key
+          - -client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token
+          - -cookie-secret-file=/etc/proxy/secrets/session_secret
+          - -openshift-service-account={{ include "webshell.serviceAccountName" . }}
+          - -openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -122,4 +148,14 @@ spec:
           claimName: {{ include "webshell.fullname" . }}-docker
       {{- else }}
         emptyDir: {}
-      {{- end -}}
+      {{- end }}
+      {{- if .Values.openshift }}
+      - name: secret-webshell-proxy-tls
+        secret:
+          defaultMode: 420
+          secretName: webshell-proxy-tls
+      - name: secret-webshell-proxy
+        secret:
+          defaultMode: 420
+          secretName: webshell-proxy
+      {{- end }}
