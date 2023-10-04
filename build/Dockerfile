@@ -2,11 +2,23 @@
 FROM node:18-bookworm as build-stage
 
 # install required tools to build the application
-RUN apt-get update && apt-get install -y libxkbfile-dev libsecret-1-dev
+RUN apt-get update && \ 
+    apt-get install -y git jq libxkbfile-dev libsecret-1-dev
+
+WORKDIR /tmp
+RUN git clone --depth 1 https://github.com/eclipse-theia/theia-blueprint.git 
 
 WORKDIR /home/theia
-# Copy repository files
-COPY theia/. .
+RUN cp -r /tmp/theia-blueprint/* . && \
+    mv package.json package.json.orig
+COPY package.json.acend .
+COPY preload.html ./applications/browser/resources/preload.html
+
+# customize package.json
+RUN jq -s '.[0] * .[1]' package.json.acend package.json.orig > package.json.tmp1 && \
+    jq 'del(.theiaPlugins."vscode-builtin-extensions-pack")' package.json.tmp1 > package.json.tmp2 && \
+    jq 'del(.theiaPlugins."vscjava.vscode-java-pack")' package.json.tmp2 > package.json.tmp3 && \
+    jq 'del(.theiaPlugins."vscjava.vscode-java-dependency")' package.json.tmp3 > package.json
 
 # Remove unnecesarry files for the browser application
 # Download plugins and build application production mode
