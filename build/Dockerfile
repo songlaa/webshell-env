@@ -1,5 +1,5 @@
 # Builder stage
-FROM node:18-bookworm as build-stage
+FROM node:20-bookworm as build-stage
 
 # install required tools to build the application
 RUN apt-get update && \ 
@@ -38,7 +38,7 @@ RUN yarn --pure-lockfile && \
     rm -rf .git applications/electron theia-extensions/theia-blueprint-launcher theia-extensions/theia-blueprint-updater node_modules
 
 # Production stage uses a small base image
-FROM node:18-bookworm-slim as production-stage
+FROM node:20-bookworm-slim as production-stage
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
 ARG ARGOCD_VERSION=v2.8.3
