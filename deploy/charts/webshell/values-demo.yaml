@@ -13,6 +13,10 @@ reset:
   enabled: true
   schedule: 0 */1 * * *
 
+theia:
+  persistence: 
+    enabled: false
+
 ingress:
   enabled: true
   className: ""
