@@ -9,8 +9,7 @@ WORKDIR /tmp
 RUN git clone --depth 1 https://github.com/eclipse-theia/theia-blueprint.git 
 
 WORKDIR /home/theia
-RUN cp -r /tmp/theia-blueprint/* . && \
-    mv package.json package.json.orig
+RUN cp -r /tmp/theia-blueprint/* .
 COPY package.json.acend .
 COPY preload.html ./applications/browser/resources/preload.html
 COPY branding-util.tsx ./theia-extensions/product/src/browser/branding-util.tsx
