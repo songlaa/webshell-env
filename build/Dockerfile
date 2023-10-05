@@ -16,7 +16,7 @@ COPY preload.html ./applications/browser/resources/preload.html
 COPY branding-util.tsx ./theia-extensions/product/src/browser/branding-util.tsx
 
 # customize package.json
-RUN jq 'del(.theiaPlugins)' package.json > package.json.tmp
+RUN jq 'del(.theiaPlugins)' package.json > package.json.tmp && \
     jq -s '.[0] * .[1]' package.json.acend package.json.tmp > package.json
 
 # Remove unnecesarry files for the browser application
