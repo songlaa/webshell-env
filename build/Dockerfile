@@ -1,5 +1,5 @@
 # Builder stage
-FROM node:18-bookworm as build-stage
+FROM node:20-bookworm as build-stage
 
 # install required tools to build the application
 RUN apt-get update && \ 
@@ -9,17 +9,14 @@ WORKDIR /tmp
 RUN git clone --depth 1 https://github.com/eclipse-theia/theia-blueprint.git 
 
 WORKDIR /home/theia
-RUN cp -r /tmp/theia-blueprint/* . && \
-    mv package.json package.json.orig
+RUN cp -r /tmp/theia-blueprint/* .
 COPY package.json.acend .
 COPY preload.html ./applications/browser/resources/preload.html
 COPY branding-util.tsx ./theia-extensions/product/src/browser/branding-util.tsx
 
 # customize package.json
-RUN jq -s '.[0] * .[1]' package.json.acend package.json.orig > package.json.tmp1 && \
-    jq 'del(.theiaPlugins."vscode-builtin-extensions-pack")' package.json.tmp1 > package.json.tmp2 && \
-    jq 'del(.theiaPlugins."vscjava.vscode-java-pack")' package.json.tmp2 > package.json.tmp3 && \
-    jq 'del(.theiaPlugins."vscjava.vscode-java-dependency")' package.json.tmp3 > package.json
+RUN jq 'del(.theiaPlugins)' package.json > package.json.tmp && \
+    jq -s '.[0] * .[1]' package.json.acend package.json.tmp > package.json
 
 # Remove unnecesarry files for the browser application
 # Download plugins and build application production mode
@@ -38,7 +35,7 @@ RUN yarn --pure-lockfile && \
     rm -rf .git applications/electron theia-extensions/theia-blueprint-launcher theia-extensions/theia-blueprint-updater node_modules
 
 # Production stage uses a small base image
-FROM node:18-bookworm-slim as production-stage
+FROM node:20-bookworm-slim as production-stage
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
 ARG ARGOCD_VERSION=v2.8.4
@@ -127,6 +124,9 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
 ENV HOME /home/theia
 WORKDIR /home/theia
 
+RUN for CMD in argocd helm kubectl oc tkn; do ${CMD} completion bash > /usr/share/bash-completion/completions/$CMD; done && \
+    terraform -install-autocomplete
+
 # Copy application from builder-stage
 COPY --from=build-stage --chown=theia:theia /home/theia /home/theia
 
@@ -137,7 +137,7 @@ ENV SHELL=/bin/bash \
     THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins \
     USE_LOCAL_GIT=true
 
-# Swtich to Theia user
+# Switch to Theia user
 USER theia
 COPY bashrc /home/theia/.bashrc
 COPY profile /home/theia/.profile
@@ -148,7 +148,6 @@ RUN cd /home/theia && \
     ./krew-linux_amd64 install krew && \
     rm -f krew-linux_amd64* && \
     export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" && \
-    # krew plugins
     for PLUGIN in ctx ns cert-manager cilium get-all modify-secret tree view-secret neat; do kubectl krew install $PLUGIN; done
 
 WORKDIR /home/theia/applications/browser
