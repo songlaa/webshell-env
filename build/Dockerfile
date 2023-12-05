@@ -38,26 +38,26 @@ RUN yarn --pure-lockfile && \
 FROM node:20-bookworm-slim as production-stage
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARG ARGOCD_VERSION=v2.8.4
+ARG ARGOCD_VERSION=v2.9.3
 # renovate: datasource=github-tags depName=Azure/azure-cli
 ARG AZURECLI_VERSION=2.51.0
 # renovate: datasource=github-tags depName=docker/compose
 ARG DOCKER_COMPOSE=v2.13.0
 # renovate: datasource=github-tags depName=helm/helm
-ARG HELM_VERSION=v3.13.0
+ARG HELM_VERSION=v3.13.2
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION=v1.28.2
+ARG KUBECTL_VERSION=v1.28.4
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.6.1
+ARG TERRAFORM_VERSION=v1.6.5
 # renovate: datasource=github-releases depName=terraform-linters/tflint
-ARG TFLINT_VERSION=v0.48.0
+ARG TFLINT_VERSION=v0.49.0
 ARG KUSTOMIZE_VERSION=v4.5.7
 # renovate: datasource=github-tags depName=kubernetes/minikube
-ARG MINIKUBE_VERSION=v1.31.2
+ARG MINIKUBE_VERSION=v1.32.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
-ARG TRIVY_VERSION=v0.45.1
+ARG TRIVY_VERSION=v0.48.0
 # renovate: datasource=github-tags depName=tektoncd/cli
-ARG TEKTON_VERSION=v0.32.0
+ARG TEKTON_VERSION=v0.33.0
 
 # Create theia user and directories
 # Application will be copied to /home/theia
