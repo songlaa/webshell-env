@@ -44,11 +44,11 @@ ARG AZURECLI_VERSION=2.51.0
 # renovate: datasource=github-tags depName=docker/compose
 ARG DOCKER_COMPOSE=v2.13.0
 # renovate: datasource=github-tags depName=helm/helm
-ARG HELM_VERSION=v3.13.2
+ARG HELM_VERSION=v3.13.3
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION=v1.28.4
+ARG KUBECTL_VERSION=v1.29.0
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.6.5
+ARG TERRAFORM_VERSION=v1.6.6
 # renovate: datasource=github-releases depName=terraform-linters/tflint
 ARG TFLINT_VERSION=v0.49.0
 ARG KUSTOMIZE_VERSION=v4.5.7
