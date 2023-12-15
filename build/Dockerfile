@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y git jq libxkbfile-dev libsecret-1-dev
 
 WORKDIR /tmp
-RUN git clone --depth 1 https://github.com/eclipse-theia/theia-blueprint.git 
+RUN git clone --depth 1 --branch v1.44.0 https://github.com/eclipse-theia/theia-blueprint.git 
 
 WORKDIR /home/theia
 RUN cp -r /tmp/theia-blueprint/* .
