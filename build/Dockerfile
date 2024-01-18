@@ -5,8 +5,11 @@ FROM node:20-bookworm as build-stage
 RUN apt-get update && \ 
     apt-get install -y git jq libxkbfile-dev libsecret-1-dev
 
+# renovate: datasource=github-tags depName=eclipse-theia/theia-blueprint
+ARG THEIA_VERSION=v1.45.0
+
 WORKDIR /tmp
-RUN git clone --depth 1 --branch v1.44.0 https://github.com/eclipse-theia/theia-blueprint.git 
+RUN git clone --depth 1 --branch ${THEIA_VERSION} https://github.com/eclipse-theia/theia-blueprint.git
 
 WORKDIR /home/theia
 RUN cp -r /tmp/theia-blueprint/* .
@@ -51,7 +54,7 @@ ARG KUBECTL_VERSION=v1.29.0
 ARG TERRAFORM_VERSION=v1.6.6
 # renovate: datasource=github-releases depName=terraform-linters/tflint
 ARG TFLINT_VERSION=v0.49.0
-ARG KUSTOMIZE_VERSION=v4.5.7
+ARG KUSTOMIZE_VERSION=v5.3.0
 # renovate: datasource=github-tags depName=kubernetes/minikube
 ARG MINIKUBE_VERSION=v1.32.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
