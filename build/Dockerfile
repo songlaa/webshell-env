@@ -15,7 +15,7 @@ WORKDIR /home/theia
 RUN cp -r /tmp/theia-blueprint/* .
 COPY package.json.acend .
 COPY preload.html ./applications/browser/resources/preload.html
-COPY branding-util.tsx ./theia-extensions/product/src/browser/branding-util.tsx
+# COPY branding-util.tsx ./theia-extensions/product/src/browser/branding-util.tsx
 
 # customize package.json
 RUN jq 'del(.theiaPlugins)' package.json > package.json.tmp && \
@@ -35,7 +35,7 @@ RUN yarn --pure-lockfile && \
     echo *.spec.* >> .yarnclean && \
     yarn autoclean --force && \
     yarn cache clean && \
-    rm -r .git applications/electron theia-extensions/launcher theia-extensions/updater node_modules
+    rm -r applications/electron theia-extensions/launcher theia-extensions/updater node_modules
 
 # Production stage uses a small base image
 FROM node:20-bookworm-slim as production-stage
