@@ -23,6 +23,8 @@ if [ ! -f "~/.kube/config" ]; then
   kubectl config set-credentials local --token="$(cat /run/secrets/kubernetes.io/serviceaccount/token)"
   kubectl config set-context local --cluster "local" --user "local"
   kubectl config set-context local --namespace="$USER"
+
+  /home/theia/create_kubeconfig.sh
 fi
 
 clear && figlet -w 120 welcome @ acend
