@@ -10,6 +10,8 @@ password: "changeme"
 # Set to true when deploying on OpenShift
 openshift: false
 
+cluster_k8s_api_host: api.training.cluster.acend.ch
+
 image:
   pullPolicy: IfNotPresent
 

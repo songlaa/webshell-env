@@ -50,6 +50,8 @@ spec:
             value: {{ .Values.user }}
           - name: THEIA_WEBVIEW_EXTERNAL_ENDPOINT
             value: {{ .Values.theia.webview_url | quote }}
+          - name: CLUSTER_K8S_API_HOST
+            value: {{ .Values.cluster_k8s_api_host | quote }}
           ports:
             - name: web
               containerPort: 3000
