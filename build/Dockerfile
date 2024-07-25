@@ -126,7 +126,7 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     unzip terraform.zip && rm terraform.zip && \
     install -t /usr/local/bin terraform && rm terraform && \
     # virtctl
-    curl -#L -o virtctl "https://github.com/kubevirt/kubevirt/releases/download/${VIRTCTL_VERSION}/virtctl-${VIRTCTL_VERSION}-amd64" && \
+    curl -#L -o virtctl "https://github.com/kubevirt/kubevirt/releases/download/${VIRTCTL_VERSION}/virtctl-${VIRTCTL_VERSION}-linux-amd64" && \
     install -t /usr/local/bin virtctl && rm virtctl
 
 ENV HOME /home/theia
