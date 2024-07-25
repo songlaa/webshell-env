@@ -61,6 +61,8 @@ ARG MINIKUBE_VERSION=v1.33.1
 ARG TRIVY_VERSION=v0.53.0
 # renovate: datasource=github-tags depName=tektoncd/cli
 ARG TEKTON_VERSION=v0.37.0
+# renovate: datasource=github-tags depName=kubevirt/kubevirt
+ARG VIRTCTL_VERSION=v1.3.0
 
 # Create theia user and directories
 # Application will be copied to /home/theia
@@ -122,7 +124,10 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     # terraform
     curl -#L -o terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION#v}/terraform_${TERRAFORM_VERSION#v}_linux_amd64.zip" && \
     unzip terraform.zip && rm terraform.zip && \
-    install -t /usr/local/bin terraform && rm terraform
+    install -t /usr/local/bin terraform && rm terraform && \
+    # virtctl
+    curl -#L -o virtctl "https://github.com/kubevirt/kubevirt/releases/download/${VIRTCTL_VERSION}/virtctl-${VIRTCTL_VERSION}-amd64" && \
+    install -t /usr/local/bin virtctl && rm virtctl
 
 ENV HOME /home/theia
 WORKDIR /home/theia
