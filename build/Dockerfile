@@ -147,9 +147,9 @@ ENV SHELL=/bin/bash \
 
 # Switch to Theia user
 USER theia
-COPY bashrc /home/theia/.bashrc
-COPY profile /home/theia/.profile
-COPY create_kubeconfig.sh /home/theia/create_kubeconfig.sh
+COPY --chown=theia bashrc /home/theia/.bashrc
+COPY --chown=theia profile /home/theia/.profile
+COPY --chown=theia create_kubeconfig.sh /home/theia/create_kubeconfig.sh
 
 RUN cd /home/theia && \
     curl -fsSLO https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz && \
