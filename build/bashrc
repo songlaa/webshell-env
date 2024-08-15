@@ -12,8 +12,8 @@ export DOCKER_HOST=tcp://localhost:2376
 export DOCKER_TLS_VERIFY=1
 export DOCKER_CERT_PATH=/home/project/.tls/client
 
-alias k=kubectl 
-complete -F __start_kubectl k
+alias k=kubectl
+complete -o default -F __start_kubectl k
 complete -C /usr/bin/terraform terraform
 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
