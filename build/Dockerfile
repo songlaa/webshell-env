@@ -41,7 +41,7 @@ RUN yarn --pure-lockfile && \
 FROM node:20-bookworm-slim as production-stage
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARG ARGOCD_VERSION=v2.12.0
+ARG ARGOCD_VERSION=v2.12.3
 # renovate: datasource=github-tags depName=Azure/azure-cli
 ARG AZURECLI_VERSION=2.51.0
 # renovate: datasource=github-tags depName=docker/compose
@@ -51,16 +51,16 @@ ARG HELM_VERSION=v3.15.4
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=v1.31.0
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.9.4
+ARG TERRAFORM_VERSION=v1.9.5
 # renovate: datasource=github-releases depName=terraform-linters/tflint
-ARG TFLINT_VERSION=v0.52.0
+ARG TFLINT_VERSION=v0.53.0
 ARG KUSTOMIZE_VERSION=v5.3.0
 # renovate: datasource=github-tags depName=kubernetes/minikube
 ARG MINIKUBE_VERSION=v1.33.1
 # renovate: datasource=github-tags depName=aquasecurity/trivy
 ARG TRIVY_VERSION=v0.54.1
 # renovate: datasource=github-tags depName=tektoncd/cli
-ARG TEKTON_VERSION=v0.37.0
+ARG TEKTON_VERSION=v0.38.0
 # renovate: datasource=github-tags depName=kubevirt/kubevirt
 ARG VIRTCTL_VERSION=v1.3.0
 
