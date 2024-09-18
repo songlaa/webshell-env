@@ -17,7 +17,7 @@ build() {
     echo -e "\nBuild:\n"
     set -e
     if [ -n "$(which docker)" ]; then
-        DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build -t $ORG/$APP .
+        docker build --progress=plain -t $ORG/$APP .
         test_image
         docker push $ORG/$APP
     elif [ -n "$(which buildah)" ]; then
