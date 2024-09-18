@@ -51,7 +51,7 @@ dind:
   enabled: true
   image:
     repository: docker
-    tag: 27.1.2-dind
+    tag: 27.2.1-dind
   resources: {}
   persistence:
     enabled: false
