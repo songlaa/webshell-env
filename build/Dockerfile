@@ -132,7 +132,7 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
 ENV HOME /home/theia
 WORKDIR /home/theia
 
-RUN for CMD in argocd helm kubectl oc tkn; do ${CMD} completion bash > /usr/share/bash-completion/completions/$CMD; done && \
+RUN for CMD in argocd helm kubectl oc tkn virtctl; do ${CMD} completion bash > /usr/share/bash-completion/completions/$CMD; done && \
     terraform -install-autocomplete
 
 # Copy application from builder-stage
