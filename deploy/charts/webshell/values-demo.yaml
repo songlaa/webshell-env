@@ -25,12 +25,12 @@ ingress:
     nginx.ingress.kubernetes.io/auth-type: "basic"
     nginx.ingress.kubernetes.io/auth-secret: "basic-auth"
   hosts:
-    - host: webshell-demo.training.acend.ch
+    - host: webshell-demo.training.songlaa.ch
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls: 
-    - secretName: acend-wildcard
+    - secretName: songlaa-wildcard
       hosts:
-        - webshell-demo.training.acend.ch
+        - webshell-demo.training.songlaa.ch
 

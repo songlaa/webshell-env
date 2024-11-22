@@ -27,4 +27,4 @@ if [ ! -f "~/.kube/config" ]; then
   /home/theia/create_kubeconfig.sh
 fi
 
-clear && figlet -w 120 welcome @ acend
+clear && figlet -w 120 welcome @ songlaa

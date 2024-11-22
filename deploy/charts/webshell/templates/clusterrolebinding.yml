@@ -12,6 +12,6 @@ subjects:
   apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
-  name: acend-webshell-{{ .Values.user }}
+  name: songlaa-webshell-{{ .Values.user }}
   apiGroup: rbac.authorization.k8s.io
 {{- end -}}

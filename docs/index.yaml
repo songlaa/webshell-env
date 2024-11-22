@@ -9,7 +9,7 @@ entries:
     name: webshell
     type: application
     urls:
-    - https://acend.github.io/webshell-env/webshell-0.1.3.tgz
+    - https://songlaa.github.io/webshell-env/webshell-0.1.3.tgz
     version: 0.1.3
   - apiVersion: v2
     appVersion: latest
@@ -19,7 +19,7 @@ entries:
     name: webshell
     type: application
     urls:
-    - https://acend.github.io/webshell-env/webshell-0.1.2.tgz
+    - https://songlaa.github.io/webshell-env/webshell-0.1.2.tgz
     version: 0.1.2
   - apiVersion: v2
     appVersion: latest
@@ -29,7 +29,7 @@ entries:
     name: webshell
     type: application
     urls:
-    - https://acend.github.io/webshell-env/webshell-0.1.1.tgz
+    - https://songlaa.github.io/webshell-env/webshell-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v2
     appVersion: latest
@@ -39,6 +39,6 @@ entries:
     name: webshell
     type: application
     urls:
-    - https://acend.github.io/webshell-env/webshell-0.1.0.tgz
+    - https://songlaa.github.io/webshell-env/webshell-0.1.0.tgz
     version: 0.1.0
 generated: "2021-11-14T10:49:12.014748878+01:00"
