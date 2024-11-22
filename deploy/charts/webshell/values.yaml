@@ -10,7 +10,7 @@ password: "changeme"
 # Set to true when deploying on OpenShift
 openshift: false
 
-cluster_k8s_api_host: api.training.cluster.acend.ch
+cluster_k8s_api_host: api.training.cluster.songlaa.ch
 
 image:
   pullPolicy: IfNotPresent
@@ -18,7 +18,7 @@ image:
 theia:
   webview_url: "{{uuid}}.webview.{{hostname}}"
   image:
-    repository: quay.io/acend/theia
+    repository: ghcr.io/songlaa/theia
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
   resources:
@@ -45,7 +45,7 @@ init:
   command:
   - sh
   - -c
-  - echo Welcome to the acend theia ide > /home/project/welcome
+  - echo Welcome to the songlaa theia ide > /home/project/welcome
 
 dind:
   enabled: true

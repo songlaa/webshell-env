@@ -10,18 +10,18 @@ clusters:
 - cluster:
     certificate-authority-data: ${CA}
     server: https://${CLUSTER_K8S_API_HOST}:6443
-  name: acend-training-cluster
+  name: songlaa-training-cluster
 contexts:
 - context:
-    cluster: acend-training-cluster
+    cluster: songlaa-training-cluster
     namespace: ${NAMESPACE}
-    user: acend-user
-  name: acend-training
-current-context: acend-training
+    user: songlaa-user
+  name: songlaa-training
+current-context: songlaa-training
 kind: Config
 preferences: {}
 users:
-- name: acend-user
+- name: songlaa-user
   user:
     token: ${TOKEN}
 EOF

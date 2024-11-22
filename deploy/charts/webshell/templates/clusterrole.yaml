@@ -4,9 +4,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    acend.ch/purpose: webshell
+    songlaa.ch/purpose: webshell
     {{- include "webshell.labels" . | nindent 4 }}
-  name: acend-webshell-{{ .Values.user }}
+  name: songlaa-webshell-{{ .Values.user }}
 rules:
 - apiGroups:
   - ""

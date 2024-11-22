@@ -7,8 +7,10 @@ Creates a theia based webshell runtime in kubernetes itself
 This script can be started locally to build and test.
 
 ```bash
+pushd build
 ./build.sh
-docker run --rm -p 3000:3000 --name theia acend/theia
+popd
+docker run --rm -p 3000:3000 --name theia songlaa/theia
 ```
 
 ## Deploy using Helm Chart
@@ -41,13 +43,13 @@ ingress: # Make sure this fits your enviornemt!
 `<secretname>`: you have to make sure that this secrets exists in your Namespace. This Helm Chart does not create a TLS Secret/Certificate for you.
 
 ```bash
-helm repo add acend-webshell https://acend.github.io/webshell-env/
-helm upgrade --install --namespace mystudent webhell acend-webshell/webshell -f values.yaml
+helm repo add songlaa-webshell https://songlaa.github.io/webshell-env/
+helm upgrade --install --namespace mystudent webhell songlaa-webshell/webshell -f values.yaml
 ```
 
 ## Release a new Chart Version
 
-When changing `version` in `deploy/charts/webshell/Chart.yaml` a new chart version is automaticly released and available in the chart repositoy `https://acend.github.io/webshell-env/`
+When changing `version` in `deploy/charts/webshell/Chart.yaml` a new chart version is automaticly released and available in the chart repositoy `https://songlaa.github.io/webshell-env/`
 
 ## workflow
 

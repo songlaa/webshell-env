@@ -61,7 +61,7 @@ export function renderWhatIsNot(): React.ReactNode {
             What is it not?
         </h3>
         <div >
-            As it used for our Tranings only it will be deleted after your Training has ended (plus 2 or 3 days). 
+            As it used for our Trainings only it will be deleted after your Training has ended (plus 2 or 3 days). 
         </div>
     </div>;
 }
@@ -72,7 +72,7 @@ export function renderSupport(windowService: WindowService): React.ReactNode {
             Support
         </h3>
         <div >
-            For any questions or things which are not working ask your acend Trainer.
+            For any questions or things which are not working ask your songlaa Trainer.
         </div>
     </div>;
 }
