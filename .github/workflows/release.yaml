@@ -2,8 +2,8 @@ name: Build & deploy released Version
 
 on:
   push:
-    tags:
-    - 'webshell-*'
+    branches:
+      - main
 
 jobs:
   build:
