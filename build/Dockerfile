@@ -13,13 +13,13 @@ RUN git clone --depth 1 --branch ${THEIA_VERSION} https://github.com/eclipse-the
 
 WORKDIR /home/theia
 RUN cp -r /tmp/theia-blueprint/* .
-COPY package.json.acend .
+COPY package.json.songlaa .
 COPY preload.html ./applications/browser/resources/preload.html
 # COPY branding-util.tsx ./theia-extensions/product/src/browser/branding-util.tsx
 
 # customize package.json
 RUN jq 'del(.theiaPlugins)' package.json > package.json.tmp && \
-    jq -s '.[0] * .[1]' package.json.acend package.json.tmp > package.json
+    jq -s '.[0] * .[1]' package.json.songlaa package.json.tmp > package.json
 
 # Remove unnecesarry files for the browser application
 # Download plugins and build application production mode
@@ -99,24 +99,12 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     # docker-compose
     curl -L# -o docker-compose "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE}/docker-compose-Linux-x86_64" && \
     install -t /usr/local/bin docker-compose && rm docker-compose && \
-    # Argo CD
-    curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64 && \
-    chmod +x /usr/local/bin/argocd && \
-    # oc
-    curl -#L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar -xvz oc && \
-    install -t /usr/local/bin oc && rm oc && \
     # Kustomize
     curl -#L "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" | tar -xvz && \
     install -t /usr/local/bin kustomize && rm kustomize && \
-    # Minikube
-    curl -#L -o minikube "https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64" && \
-    install -t /usr/local/bin minikube && rm minikube && \
     # Trivy
     curl -#L "https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION#v}_Linux-64bit.tar.gz" | tar -xvz trivy && \
     install -t /usr/local/bin trivy && rm trivy && \
-    # Tekton
-    curl -#L "https://github.com/tektoncd/cli/releases/download/${TEKTON_VERSION}/tkn_${TEKTON_VERSION#v}_Linux_x86_64.tar.gz" | tar -xvz tkn && \
-    install -t /usr/local/bin tkn && rm tkn && \
     # TFLint
     curl -#L -o tflint.zip "https://github.com/terraform-linters/tflint/releases/download/${TFLINT_VERSION}/tflint_linux_amd64.zip" && \
     unzip tflint.zip && rm tflint.zip && \
@@ -124,15 +112,11 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     # terraform
     curl -#L -o terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION#v}/terraform_${TERRAFORM_VERSION#v}_linux_amd64.zip" && \
     unzip terraform.zip && rm terraform.zip && \
-    install -t /usr/local/bin terraform && rm terraform && \
-    # virtctl
-    curl -#L -o virtctl "https://github.com/kubevirt/kubevirt/releases/download/${VIRTCTL_VERSION}/virtctl-${VIRTCTL_VERSION}-linux-amd64" && \
-    install -t /usr/local/bin virtctl && rm virtctl
-
+    install -t /usr/local/bin terraform && rm terraform
 ENV HOME /home/theia
 WORKDIR /home/theia
 
-RUN for CMD in argocd helm kubectl oc tkn virtctl; do ${CMD} completion bash > /usr/share/bash-completion/completions/$CMD; done && \
+RUN for CMD in helm kubectl; do ${CMD} completion bash > /usr/share/bash-completion/completions/$CMD; done && \
     terraform -install-autocomplete
 
 # Copy application from builder-stage
