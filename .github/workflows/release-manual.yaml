@@ -30,4 +30,4 @@ jobs:
           context: build
           push: true
           tags: |
-            ghcr.io/songlaa/theia:0.5.12
+            ghcr.io/songlaa/theia:0.5.13

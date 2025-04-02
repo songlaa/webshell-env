@@ -65,6 +65,8 @@ spec:
         - name: dind
           image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+          - --registry-mirror=https://mirror.gcr.io
           env:
           - name: DOCKER_TLS_CERTDIR
             value: /home/project/.tls
