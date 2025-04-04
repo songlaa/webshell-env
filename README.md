@@ -15,11 +15,36 @@ docker run --rm -p 3000:3000 --name theia songlaa/theia
 
 ## Deploy using Helm Chart
 
+### Deploy in kind
+
+This will create a kind cluster with the necessary prerequisites
+
+```bash
+kind create cluster
+kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
+# create cert for ingress  
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -out self-signed-tls.crt -keyout self-signed-tls.key \
+    -subj "/CN=localhost" \
+    -reqexts SAN \
+    -extensions SAN \
+    -config <(cat /etc/ssl/openssl.cnf \
+        <(printf "[SAN]\nsubjectAltName=DNS:localhost,DNS:*.localhost"))
+kubectl create ns mystudent        
+kubectl create secret -n mystudent tls self-signed-tls - key self-signed-tls.key - cert self-signed-tls.crt
+kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8443:443 &
+
+```
+
 This will deploy one webshell. If multiple webshells are needed, create as many instances in seperated Namespaces as you want.
 Create a `values.yaml` e.g.:
 
 ```yaml
-student: "mystudent" # This should be the namespace where the student's webshell is deployed to
+user: "mystudent" # This should be the namespace where the student's webshell is deployed to
 password: "supersecretbassword" # For the basic-auth Autentication
 
 ingress: # Make sure this fits your enviornemt!
@@ -30,22 +55,29 @@ ingress: # Make sure this fits your enviornemt!
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth
   hosts:
-    - host: mystudent.<domain>
+    - host: localhost
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls: 
-   - secretName: <secretname>
+   - secretName: tls
      hosts:
-       - mystudent.<domain>
-```
+       - localhost
 
-`<secretname>`: you have to make sure that this secrets exists in your Namespace. This Helm Chart does not create a TLS Secret/Certificate for you.
+theia:
+  persistence:
+    storageclass: standard
+dind:
+  persistence:
+    storageclass: standard
+```
 
 ```bash
 helm repo add songlaa-webshell https://songlaa.github.io/webshell-env/
-helm upgrade --install --namespace mystudent webhell songlaa-webshell/webshell -f values.yaml
+helm upgrade --install --namespace mystudent webshell songlaa-webshell/webshell -f values.yaml
 ```
+
+Now use the hostname or the port-forwarding with localhost:8443
 
 ## Release a new Chart Version
 
