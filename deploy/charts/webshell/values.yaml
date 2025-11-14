@@ -51,7 +51,7 @@ dind:
   enabled: true
   image:
     repository: docker
-    tag: 28.0.4-dind
+    tag: 29.0.0-dind-rootless
   resources: {}
   persistence:
     enabled: false

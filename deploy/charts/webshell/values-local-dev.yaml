@@ -1,0 +1,26 @@
+user: "mystudent" # This should be the namespace where the student's webshell is deployed to
+password: "supersecretbassword" # For the basic-auth Autentication
+
+ingress: # Make sure this fits your enviornemt!
+  enabled: true
+  className: "nginx"
+  annotations: 
+    ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+  hosts:
+    - host: localhost
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: 
+   - secretName: tls
+     hosts:
+       - localhost
+
+theia:
+  persistence:
+    storageclass: standard
+dind:
+  persistence:
+    storageclass: standard
