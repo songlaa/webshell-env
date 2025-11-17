@@ -52,7 +52,7 @@ dind:
   image:
     repository: docker
     # Use dind-rootless tag for rootless mode, or dind for privileged mode
-    tag: 29.0.0-dind-rootless
+    tag: 29.0.1-dind-rootless
   resources: {}
   # Security context for the dind container
   # Default configuration runs in rootless mode for enhanced security
