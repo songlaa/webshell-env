@@ -13,6 +13,14 @@ popd
 docker run --rm -p 3000:3000 --name theia songlaa/theia
 ```
 
+To build and push the image to the registry, use the `push` argument:
+
+```bash
+pushd build
+./build.sh push
+popd
+```
+
 ## Deploy using Helm Chart
 
 ### Deploy in kind
@@ -73,8 +81,10 @@ dind:
 ```
 
 ```bash
+pushd deploy/charts/webshell
 helm repo add songlaa-webshell https://songlaa.github.io/webshell-env/
-helm upgrade --install --namespace mystudent webshell songlaa-webshell/webshell -f values.yaml
+helm upgrade --install --namespace mystudent webshell songlaa-webshell/webshell -f values-local-dev.yaml
+popd
 ```
 
 Now use the hostname or the port-forwarding with localhost:8443

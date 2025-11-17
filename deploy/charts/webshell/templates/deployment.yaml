@@ -76,12 +76,7 @@ spec:
           resources:
             {{- toYaml .Values.dind.resources | nindent 12 }}
           securityContext:
-            allowPrivilegeEscalation: true
-            capabilities: {}
-            privileged: true
-            procMount: Default
-            readOnlyRootFilesystem: false
-            runAsNonRoot: false
+            {{- toYaml .Values.dind.securityContext | nindent 12 }}
           stdin: true
           tty: true
           readinessProbe:
@@ -98,7 +93,7 @@ spec:
           - name: shared-data
             mountPath: /home/project
           - name: docker-volume
-            mountPath: /var/lib/docker
+            mountPath: {{ .Values.dind.dataPath }}
         {{- end }}
         {{- if .Values.openshift }}
         - name: oauth-proxy

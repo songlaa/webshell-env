@@ -19,10 +19,16 @@ build() {
     if [ -n "$(which docker)" ]; then
         docker build --progress=plain -t $ORG/$APP .
         test_image
-        docker push $ORG/$APP
+        if [ "$1" = "push" ]; then
+            echo -e "\nPushing image to registry:\n"
+            docker push $ORG/$APP
+        fi
     elif [ -n "$(which buildah)" ]; then
         sudo buildah bud -t docker.io/$ORG/$APP .
-        sudo buildah push docker.io/$ORG/$APP
+        if [ "$1" = "push" ]; then
+            echo -e "\nPushing image to registry:\n"
+            sudo buildah push docker.io/$ORG/$APP
+        fi
     fi
 }
 
@@ -39,6 +45,6 @@ test_image() {
     docker logs $APP
 }
 
-build
+build "$1"
 
 exit 0
