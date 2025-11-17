@@ -1,12 +1,12 @@
 # Builder stage
-FROM node:20-bookworm as build-stage
+FROM node:22-bookworm AS build-stage
 
 # install required tools to build the application
 RUN apt-get update && \ 
     apt-get install -y git jq libxkbfile-dev libsecret-1-dev
 
 # renovate: datasource=github-tags depName=eclipse-theia/theia-blueprint
-ARG THEIA_VERSION=1.55.0
+ARG THEIA_VERSION=v1.64.100
 
 WORKDIR /tmp
 RUN git clone --depth 1 --branch ${THEIA_VERSION} https://github.com/eclipse-theia/theia-blueprint.git
@@ -38,31 +38,31 @@ RUN yarn --pure-lockfile && \
     rm -r applications/electron theia-extensions/launcher theia-extensions/updater node_modules
 
 # Production stage uses a small base image
-FROM node:20-bookworm-slim as production-stage
+FROM node:22-bookworm-slim as production-stage
 
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARG ARGOCD_VERSION=v2.13.0
+ARG ARGOCD_VERSION=v3.1.7
 # renovate: datasource=github-tags depName=Azure/azure-cli
 ARG AZURECLI_VERSION=2.51.0
 # renovate: datasource=github-tags depName=docker/compose
 ARG DOCKER_COMPOSE=v2.13.0
 # renovate: datasource=github-tags depName=helm/helm
-ARG HELM_VERSION=v3.16.2
+ARG HELM_VERSION=v3.19.0
 # renovate: datasource=github-tags depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION=v1.31.2
+ARG KUBECTL_VERSION=v1.34.1
 # renovate: datasource=github-tags depName=hashicorp/terraform
-ARG TERRAFORM_VERSION=v1.9.8
+ARG TERRAFORM_VERSION=v1.13.3
 # renovate: datasource=github-releases depName=terraform-linters/tflint
-ARG TFLINT_VERSION=v0.54.0
+ARG TFLINT_VERSION=v0.59.1
 ARG KUSTOMIZE_VERSION=v5.3.0
 # renovate: datasource=github-tags depName=kubernetes/minikube
-ARG MINIKUBE_VERSION=v1.34.0
+ARG MINIKUBE_VERSION=v1.37.0
 # renovate: datasource=github-tags depName=aquasecurity/trivy
-ARG TRIVY_VERSION=v0.57.0
+ARG TRIVY_VERSION=v0.66.0
 # renovate: datasource=github-tags depName=tektoncd/cli
-ARG TEKTON_VERSION=v0.38.1
+ARG TEKTON_VERSION=v0.42.0
 # renovate: datasource=github-tags depName=kubevirt/kubevirt
-ARG VIRTCTL_VERSION=v1.3.1
+ARG VIRTCTL_VERSION=v1.6.1
 
 # Create theia user and directories
 # Application will be copied to /home/theia
@@ -85,6 +85,10 @@ RUN apt-get update && \
     tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && \
     apt-get install -y docker-ce-cli && \
+    DIVE_VERSION=$(curl -sL "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && \
+    curl -fOL "https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.deb" && \
+    apt install ./dive_${DIVE_VERSION}_linux_amd64.deb && \
+    rm dive_${DIVE_VERSION}_linux_amd64.deb && \
     apt-get autoremove -y && \
     apt-get autoclean -y && \
     apt-get clean
@@ -112,7 +116,12 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     # terraform
     curl -#L -o terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION#v}/terraform_${TERRAFORM_VERSION#v}_linux_amd64.zip" && \
     unzip terraform.zip && rm terraform.zip && \
-    install -t /usr/local/bin terraform && rm terraform
+    install -t /usr/local/bin terraform && rm terraform && \
+    # cosign
+    curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64" && \
+    install -m 755 cosign-linux-amd64 /usr/local/bin/cosign && rm cosign-linux-amd64
+# sudo mv cosign-linux-amd64 /usr/local/bin/cosign
+# sudo chmod +x /usr/local/bin/cosign
 ENV HOME /home/theia
 WORKDIR /home/theia
 
