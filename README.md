@@ -47,43 +47,24 @@ kubectl create secret -n mystudent tls self-signed-tls - key self-signed-tls.key
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8443:443 &
 
 ```
+With a working cluster you can deploy the webshell.
 
-This will deploy one webshell. If multiple webshells are needed, create as many instances in seperated Namespaces as you want.
-Create a `values.yaml` e.g.:
-
-```yaml
-user: "mystudent" # This should be the namespace where the student's webshell is deployed to
-password: "supersecretbassword" # For the basic-auth Autentication
-
-ingress: # Make sure this fits your enviornemt!
-  enabled: true
-  className: "nginx"
-  annotations: 
-    ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: basic-auth
-  hosts:
-    - host: localhost
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: 
-   - secretName: tls
-     hosts:
-       - localhost
-
-theia:
-  persistence:
-    storageclass: standard
-dind:
-  persistence:
-    storageclass: standard
-```
+For running the last public version on your local env:
 
 ```bash
 pushd deploy/charts/webshell
 helm repo add songlaa-webshell https://songlaa.github.io/webshell-env/
+helm repo update songlaa-webshell
 helm upgrade --install --namespace mystudent webshell songlaa-webshell/webshell -f values-local-dev.yaml
+popd
+````
+
+or if you want to use the locally build image and template with `kind` :
+
+```bash
+kind load docker-image songlaa/theia
+pushd deploy/charts/webshell
+helm upgrade --install --namespace mystudent webshell . -f values.yaml -f values-local-dev.yaml --set theia.image.repository=songlaa/theia --set theia.image.tag=latest
 popd
 ```
 

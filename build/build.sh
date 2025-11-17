@@ -39,7 +39,6 @@ test_image() {
     docker images | grep $APP
     sleep 15
 
-    curl -s localhost:3000
 
     echo -e "\n\nLogs:\n"
     docker logs $APP

@@ -3,21 +3,13 @@ kind: Service
 metadata:
   name: {{ include "webshell.fullname" . }}
   namespace: {{ .Values.namespace | default .Release.Namespace }}
-  annotations:
-    {{- if .Values.openshiftOauthProxy.enabled }}
-    service.beta.openshift.io/serving-cert-secret-name: webshell-proxy-tls
-    {{- end }}
   labels:
     {{- include "webshell.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      {{- if .Values.openshiftOauthProxy.enabled }}
-      targetPort: 8888
-      {{- else }}
       targetPort: 3000
-      {{- end }}
       protocol: TCP
       name: web
   selector:
