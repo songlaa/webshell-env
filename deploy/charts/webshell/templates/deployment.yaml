@@ -76,16 +76,7 @@ spec:
           resources:
             {{- toYaml .Values.dind.resources | nindent 12 }}
           securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            privileged: false
-            readOnlyRootFilesystem: false
-            runAsNonRoot: true
-            runAsUser: 100
-            seccompProfile:
-              type: RuntimeDefault
+            {{- toYaml .Values.dind.securityContext | nindent 12 }}
           stdin: true
           tty: true
           readinessProbe:
@@ -102,7 +93,7 @@ spec:
           - name: shared-data
             mountPath: /home/project
           - name: docker-volume
-            mountPath: /home/rootless/.local/share/docker
+            mountPath: {{ .Values.dind.dataPath }}
         {{- end }}
         {{- if .Values.openshift }}
         - name: oauth-proxy

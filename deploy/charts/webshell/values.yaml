@@ -51,8 +51,28 @@ dind:
   enabled: true
   image:
     repository: docker
+    # Use dind-rootless tag for rootless mode, or dind for privileged mode
     tag: 29.0.0-dind-rootless
   resources: {}
+  # Security context for the dind container
+  # Default configuration runs in rootless mode for enhanced security
+  # To run privileged dind, set privileged: true, runAsNonRoot: false, 
+  # runAsUser: 0, and change the image tag to use 'dind' instead of 'dind-rootless'
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    privileged: false
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  # Volume mount path for docker data
+  # Use /home/rootless/.local/share/docker for rootless mode
+  # Use /var/lib/docker for privileged mode
+  dataPath: /home/rootless/.local/share/docker
   persistence:
     enabled: false
     pvcsize: 50Gi
