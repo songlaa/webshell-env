@@ -21,6 +21,8 @@ ingress: # Make sure this fits your environment!
 theia:
   persistence:
     storageclass: standard
+    enabled: true
 dind:
   persistence:
     storageclass: standard
+    enabled: true

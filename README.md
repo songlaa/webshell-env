@@ -13,7 +13,7 @@ popd
 docker run --rm -p 3000:3000 --name theia songlaa/theia
 ```
 
-To build and push the image to the registry, use the `push` argument:
+To build and push the image to the docker.io registry, use the `push` argument, the deployment however uses ghcr.io by default:
 
 ```bash
 pushd build
@@ -43,7 +43,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -config <(cat /etc/ssl/openssl.cnf \
         <(printf "[SAN]\nsubjectAltName=DNS:localhost,DNS:*.localhost"))
 kubectl create ns mystudent        
-kubectl create secret -n mystudent tls self-signed-tls - key self-signed-tls.key - cert self-signed-tls.crt
+kubectl create secret -n mystudent tls self-signed-tls --key self-signed-tls.key --cert self-signed-tls.crt
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8443:443 &
 
 ```
@@ -68,7 +68,16 @@ helm upgrade --install --namespace mystudent webshell . -f values.yaml -f values
 popd
 ```
 
-Now use the hostname or the port-forwarding with localhost:8443
+For rootfull node change image name (remove -rootless) and set dind.rootless=false:
+
+```bash
+kind load docker-image songlaa/theia
+pushd deploy/charts/webshell
+helm upgrade --install --namespace mystudent webshell . -f values.yaml -f values-local-dev.yaml --set theia.image.repository=songlaa/theia --set theia.image.tag=latest --set dind.image.tag=29.0.1-dind --set dind.rootless=false
+popd
+```
+
+Now use the hostname or the port-forwarding with https://localhost:8443
 
 ## Release a new Chart Version
 
