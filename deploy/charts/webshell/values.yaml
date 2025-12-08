@@ -47,6 +47,10 @@ dind:
     # Use dind-rootless tag for rootless mode, or dind for privileged mode
     tag: 29.0.1-dind-rootless
   resources: {}
+  # Volume mount path for docker data
+  # Use /var/lib/docker for privileged mode
+  # Use /home/rootless/.local/share/docker for rootless mode
+  dataPath: /var/lib/docker
   persistence:
     enabled: false
     pvcsize: 50Gi

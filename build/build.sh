@@ -17,7 +17,8 @@ build() {
     echo -e "\nBuild:\n"
     set -e
     if [ -n "$(which docker)" ]; then
-        docker build --progress=plain -t $ORG/$APP .
+        # delete cache to ensure latest packages are installed
+        docker build --no-cache --progress=plain -t $ORG/$APP .
         test_image
         if [ "$1" = "push" ]; then
             echo -e "\nPushing image to registry:\n"
@@ -37,11 +38,7 @@ test_image() {
     set -e
     docker run -d --rm -p 3000:3000 --name $APP $ORG/$APP
     docker images | grep $APP
-    sleep 15
 
-
-    echo -e "\n\nLogs:\n"
-    docker logs $APP
 }
 
 build "$1"

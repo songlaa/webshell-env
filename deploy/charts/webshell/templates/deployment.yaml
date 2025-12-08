@@ -98,7 +98,7 @@ spec:
           - name: shared-data
             mountPath: /home/project
           - name: docker-volume
-            mountPath: /var/lib/docker
+            mountPath: {{ .Values.dind.dataPath }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
