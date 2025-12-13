@@ -2,6 +2,12 @@
 
 Creates a theia based webshell runtime in kubernetes itself
 
+## Docker in Docker
+
+Docker in Docker (dind) can be enabled. If the rootless image is chosen dind.rootless must be set to true as well.
+
+Persistency for dind can be enabled, with rootless mode an init container fixes ownership of docker data dir (moved from standard dir) to match fsgroup and rootless uid (1000). fsgroup (1000) is aligned to work with dind rootless.
+
 ## build.sh
 
 This script can be started locally to build and test.
@@ -28,6 +34,7 @@ popd
 This will create a kind cluster with the necessary prerequisites
 
 ```bash
+kind delete cluster || true
 kind create cluster
 kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
 kubectl wait --namespace ingress-nginx \

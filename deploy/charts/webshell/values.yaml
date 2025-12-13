@@ -38,7 +38,7 @@ init:
   command:
   - sh
   - -c
-  - echo Welcome to the songlaa theia ide > /home/project/welcome
+  - echo Welcome to the songlaa theia ide > /home/project/welcome 
 
 dind:
   enabled: true
@@ -68,8 +68,6 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext:
-  fsGroup: 1001
 
 rbac:
   create: true

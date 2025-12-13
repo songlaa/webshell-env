@@ -27,8 +27,25 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "webshell.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        fsGroup: 1000  # to match rootless user GID
       initContainers:
+      {{- if and .Values.dind.enabled .Values.dind.persistence.enabled .Values.dind.rootless }}
+      # This init container must run as root to be able to chown the PV (Longhorn PVs are initialized as 0:0)
+      - name: prepare-pv
+        image: "{{ .Values.init.image.repository }}:{{ .Values.init.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          runAsUser: 0
+        command:
+          - sh
+          - -c
+          - |
+            chown -R 1000:1000 /docker-data
+            echo "Prepared PV for dind rootless usage"
+        volumeMounts:
+        - name: docker-volume
+          mountPath: /docker-data
+      {{- end }}
       - name: welcome-msg
         image: "{{ .Values.init.image.repository }}:{{ .Values.init.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -41,8 +58,6 @@ spec:
           mountPath: /home/project
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.theia.securityContext | nindent 12 }}
           image: "{{ .Values.theia.image.repository }}:{{ .Values.theia.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
@@ -70,14 +85,6 @@ spec:
           env:
           - name: DOCKER_TLS_CERTDIR
             value: /home/project/.tls
-            # Volume mount path for docker data
-            # would be /var/lib/docker for rootfull mode
-            # and /home/rootless/.local/share for rootless mode
-            # can be overwritten with $XDG_DATA_HOME
-          {{- if .Values.dind.rootless }}
-          - name: XDG_DATA_HOME
-            value: /docker-data # forces data for rootless and rootfull to be in the same place
-          {{- end }}
           ports:
           - containerPort: 2376
             protocol: TCP
@@ -103,6 +110,12 @@ spec:
             initialDelaySeconds: 5
             timeoutSeconds: 10
           volumeMounts:
+          {{- if .Values.dind.rootless }}
+          # Docker data dir must be changed for rootless mode with persistence
+          - name: dind-rootless-config
+            mountPath: /home/rootless/.config/docker/daemon.json
+            subPath: daemon.json
+          {{- end }}
           - name: shared-data
             mountPath: /home/project
           - name: docker-volume
@@ -125,6 +138,17 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+      # docker data dir, change for rootless mode
+      # would be /var/lib/docker for rootfull mode
+      # and /home/rootless/.local/share for rootless mode
+      {{- if .Values.dind.rootless }}
+      - name: dind-rootless-config
+        configMap:
+          name: dind-rootless-config
+          items:
+          - key: daemon.json
+            path: daemon.json
+      {{- end }}
       - name: shared-data
       {{- if .Values.theia.persistence.enabled }}
         persistentVolumeClaim:

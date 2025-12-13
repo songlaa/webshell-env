@@ -1,0 +1,11 @@
+{{- if .Values.dind.rootless }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dind-rootless-config
+data:
+  daemon.json: |
+    {
+      "data-root": "/docker-data/docker" 
+    }
+{{- end }}
