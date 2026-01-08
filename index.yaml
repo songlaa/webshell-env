@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   webshell:
   - apiVersion: v2
+    appVersion: 0.5.21
+    created: "2026-01-08T14:24:37.731368464Z"
+    description: A Helm chart to deploy a webshell environment
+    digest: 830fa8848c3a2208d35294069be7f52372a7cf8fdc22ad2a6e9faf6f079ec0ce
+    name: webshell
+    type: application
+    urls:
+    - https://github.com/songlaa/webshell-env/releases/download/webshell-0.5.21/webshell-0.5.21.tgz
+    version: 0.5.21
+  - apiVersion: v2
     appVersion: 0.5.20
     created: "2025-12-13T21:27:28.499539918Z"
     description: A Helm chart to deploy a webshell environment
@@ -91,4 +101,4 @@ entries:
     urls:
     - https://github.com/songlaa/webshell-env/releases/download/webshell-0.5.12/webshell-0.5.12.tgz
     version: 0.5.12
-generated: "2025-12-13T21:27:28.499579913Z"
+generated: "2026-01-08T14:24:37.731404782Z"
